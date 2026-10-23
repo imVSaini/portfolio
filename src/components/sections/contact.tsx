@@ -19,7 +19,7 @@ export function Contact() {
         </h2>
         <div className="mt-10 flex flex-col gap-8 md:mt-14 md:flex-row md:items-end md:justify-between">
           <p
-            className="max-w-[30rem] font-serif text-2xl leading-snug text-paper/80 italic"
+            className="max-w-120 font-serif text-2xl leading-snug text-paper/80 italic"
             data-reveal
           >
             I’m open to senior and lead backend roles, and the occasional well-scoped contract. Tell

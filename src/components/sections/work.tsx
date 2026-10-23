@@ -56,14 +56,14 @@ function ProjectPanel({
         href={project.href}
         target="_blank"
         rel="noreferrer"
-        className="relative block aspect-[16/10] overflow-hidden bg-ink-soft md:aspect-auto md:h-[46vh]"
+        className="relative block aspect-16/10 overflow-hidden bg-ink-soft md:aspect-auto md:h-[46vh]"
         aria-label={`${project.title} — case study (opens in a new tab)`}
       >
         <span data-scroll className="frame-reveal absolute inset-0 block">
           <span
             data-scroll
             data-scroll-speed="0.06"
-            className="absolute inset-y-0 -left-[10%] block w-[120%]"
+            className="absolute inset-y-0 left-[-10%] block w-[120%]"
           >
             <Image
               src={project.image}
@@ -93,7 +93,7 @@ function ProjectPanel({
           </h3>
           <p className="mt-2 font-serif text-xl text-paper/60 italic">{project.client}</p>
         </div>
-        <div className="flex flex-col justify-end gap-4 md:max-w-[22rem]">
+        <div className="flex flex-col justify-end gap-4 md:max-w-88">
           <p className="text-[0.9375rem] leading-relaxed text-paper/75">{project.description}</p>
           <ul className="eyebrow flex flex-wrap gap-x-3 gap-y-1 text-paper/45">
             {project.stack.map((tech) => (

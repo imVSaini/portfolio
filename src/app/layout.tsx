@@ -56,7 +56,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="grain">
         <a
           href="#index"
-          className="sr-only z-[80] bg-signal px-3 py-2 text-paper focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+          className="sr-only z-80 bg-signal px-3 py-2 text-paper focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
         >
           Skip to content
         </a>

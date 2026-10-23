@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <SmoothScroll>
       {/* One long strip on desktop (scrolled along x), a normal stack on mobile. */}
-      <main className="md:flex md:h-svh md:w-max md:flex-nowrap md:[&>*]:shrink-0">
+      <main className="md:flex md:h-svh md:w-max md:flex-nowrap md:*:shrink-0">
         <Hero />
         <About />
         <Experience />

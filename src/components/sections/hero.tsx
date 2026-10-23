@@ -41,7 +41,7 @@ export function Hero() {
         <p className="text-lg leading-snug text-balance md:text-xl" data-intro-fade>
           <span className="font-serif text-[1.15em] italic">{profile.role}</span> {profile.intro}
         </p>
-        <p className="eyebrow max-w-[22rem] text-ink/60" data-intro-fade>
+        <p className="eyebrow max-w-88 text-ink/60" data-intro-fade>
           Python · FastAPI · PostgreSQL · Redis · Celery · LangGraph · Node.js · AWS
         </p>
         <p className="eyebrow flex items-center gap-3" data-intro-fade>

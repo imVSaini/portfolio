@@ -63,7 +63,7 @@ export function Preloader() {
     <div
       ref={root}
       aria-hidden="true"
-      className="fixed inset-0 z-[70] flex flex-col justify-between bg-ink p-[4vw] text-paper"
+      className="fixed inset-0 z-70 flex flex-col justify-between bg-ink p-[4vw] text-paper"
     >
       <div data-loader-inner className="flex h-full flex-col justify-between">
         <div className="eyebrow flex justify-between text-paper/60">

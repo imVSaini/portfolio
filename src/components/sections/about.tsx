@@ -15,7 +15,7 @@ export function About() {
         >
           {profile.statement}
         </p>
-        <p className="max-w-[34rem] text-base leading-relaxed text-paper/70" data-reveal>
+        <p className="max-w-136 text-base leading-relaxed text-paper/70" data-reveal>
           {profile.now}
         </p>
       </div>

@@ -40,7 +40,7 @@ export function Experience() {
         </aside>
 
         {/* Fades the column out under the header and HUD while it travels. */}
-        <div className="px-[4vw] md:w-[60vw] md:[mask-image:linear-gradient(to_bottom,transparent_6rem,black_12rem,black_calc(100%-7rem),transparent_calc(100%-4rem))] md:pr-[6vw] md:pl-0">
+        <div className="px-[4vw] md:w-[60vw] md:mask-[linear-gradient(to_bottom,transparent_6rem,black_12rem,black_calc(100%-7rem),transparent_calc(100%-4rem))] md:pr-[6vw] md:pl-0">
           <ol data-fake-vertical-track className="pb-16 md:pt-32 md:pb-[22vh]">
             {experience.map((role, i) => (
               <li key={role.company} className="border-t border-ink/15 py-10 md:py-14">
@@ -53,11 +53,11 @@ export function Experience() {
                   </span>
                 </div>
 
-                <h3 className="text-[2rem] leading-none font-semibold tracking-[-0.025em] md:text-[2.75rem]">
+                <h3 className="text-[2rem] leading-none font-semibold tracking-tight md:text-[2.75rem]">
                   {role.company}
                 </h3>
                 <p className="mt-2 font-serif text-2xl text-ink/70 italic">{role.title}</p>
-                <p className="mt-6 max-w-[40rem] text-lg leading-snug">{role.summary}</p>
+                <p className="mt-6 max-w-160 text-lg leading-snug">{role.summary}</p>
 
                 <ul className="mt-8 grid gap-x-10 gap-y-4 text-[0.9375rem] leading-relaxed text-ink/75 lg:grid-cols-2">
                   {role.points.map((point) => (
