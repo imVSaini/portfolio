@@ -17,7 +17,7 @@ export function Hero() {
         <LocalTime timeZone={profile.timezone} label={profile.timezoneLabel} />
         <span className="flex items-center gap-2">
           <span className="size-1.5 rounded-full bg-signal" aria-hidden />
-          Open to senior backend roles
+          {profile.availability}
         </span>
       </div>
 
@@ -39,7 +39,7 @@ export function Hero() {
 
       <div className="grid gap-8 md:w-[92vw] md:grid-cols-[minmax(0,28rem)_1fr_auto] md:items-end md:gap-[6vw]">
         <p className="text-lg leading-snug text-balance md:text-xl" data-intro-fade>
-          <span className="font-serif text-[1.15em] italic">{profile.role}</span> {profile.intro}
+          <span className="font-serif text-[1.15em] italic">{profile.role}.</span> {profile.intro}
         </p>
         <p className="eyebrow max-w-88 text-ink/60" data-intro-fade>
           Python · FastAPI · PostgreSQL · Redis · Celery · LangGraph · Node.js · AWS

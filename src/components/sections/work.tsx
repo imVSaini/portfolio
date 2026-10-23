@@ -20,8 +20,8 @@ export function Work() {
           </sup>
         </h2>
         <p className="max-w-[24rem] text-base leading-relaxed text-paper/65" data-reveal>
-          Products and platforms I’ve engineered — from a workspace SaaS on FastAPI and Next.js to
-          international conference platforms and studio sites.
+          Seven recent builds, from a workspace SaaS on FastAPI and Next.js to conference platforms
+          and studio websites.
         </p>
       </header>
 

@@ -27,7 +27,7 @@ const jetbrains = JetBrains_Mono({
   display: "swap",
 });
 
-const description = `${profile.name} — ${profile.role} in ${profile.location}, ${profile.intro}`;
+const description = `${profile.name}, ${profile.role} in ${profile.location}. ${profile.intro}`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),

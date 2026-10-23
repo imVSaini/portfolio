@@ -12,16 +12,17 @@ export const profile = {
     { label: "LinkedIn", href: "https://www.linkedin.com/in/vaibhavsaini07" },
     { label: "Email", href: "mailto:vaibhav.dev20@gmail.com" },
   ],
+  availability: "Open to lead & senior roles",
   intro:
-    "building multi-tenant SaaS, retrieval-augmented chatbots and AI agents that hold up in production.",
+    "I build the backend of multi-tenant SaaS products: the data model, the APIs, the background jobs, and the AI features that sit on top.",
   statement:
-    "Six years on the side of software you don’t see — schemas, queues, caches, and the integrations that keep running when a vendor doesn’t.",
-  now: "Leading backend engineering at Screen Interactiv across five production products: a multi-tenant CRM, an embeddable AI chatbot, a channel-partner sales portal, a review platform and an internal task platform.",
+    "I work on the part of a product nobody screenshots. The schema, the queue, the cache, and the integration that keeps syncing after the vendor goes down.",
+  now: "Since 2022 I’ve led backend engineering at Screen Interactiv. I own architecture, code review and sprint delivery for five products in production: a multi-tenant CRM, an embeddable AI chatbot, a channel-partner sales portal, a review platform and an internal task tool.",
   stats: [
-    { value: "06+", label: "Years shipping backends" },
-    { value: "05", label: "Production products led" },
-    { value: "325", label: "Backend tests in CI" },
-    { value: "−35%", label: "PostgreSQL query time" },
+    { value: "06+", label: "Years building backends" },
+    { value: "05", label: "Products I lead in production" },
+    { value: "325", label: "Backend tests running in CI" },
+    { value: "−35%", label: "Query time after PostgreSQL tuning" },
   ],
 } as const;
 

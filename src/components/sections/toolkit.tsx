@@ -10,11 +10,11 @@ export function Toolkit() {
       <div className="flex flex-col justify-between gap-8 md:w-[30vw]">
         <p className="eyebrow text-ink/50">(04) Toolkit</p>
         <h2 className="font-serif text-[3.25rem] leading-[0.95] tracking-[-0.02em] md:text-[min(10vh,5.5vw)]">
-          What I reach for, <em className="text-signal">and why.</em>
+          What I build with, <em className="text-signal">and how.</em>
         </h2>
         <p className="max-w-104 text-base leading-relaxed text-ink/70" data-reveal>
-          Python and PostgreSQL do most of the work. Everything else earns its place by making a
-          system easier to reason about, cheaper to run or harder to break.
+          Python and PostgreSQL carry most of it. I add anything else only when it makes a system
+          simpler to reason about or harder to break.
         </p>
       </div>
 

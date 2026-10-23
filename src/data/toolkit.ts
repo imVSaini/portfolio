@@ -8,7 +8,7 @@ export const toolkit = [
     group: "Data",
     items: ["PostgreSQL", "pgvector", "MySQL", "MongoDB", "Redis", "SQLAlchemy 2.0"],
   },
-  { group: "Queues", items: ["Kafka", "RabbitMQ", "Celery", "Redis Pub/Sub"] },
+  { group: "Messaging", items: ["Kafka", "RabbitMQ", "Celery", "Redis Pub/Sub"] },
   { group: "AI / LLM", items: ["OpenAI APIs", "RAG", "LangChain", "LangGraph", "Tool calling"] },
   {
     group: "Cloud",
@@ -20,19 +20,19 @@ export const toolkit = [
 
 export const principles = [
   {
-    title: "Isolate tenants first",
-    body: "Schema-per-tenant, scoped caches, scoped keys. Leaks are not a bug class I accept.",
+    title: "Tenants never share by accident",
+    body: "Separate schemas, scoped cache keys, scoped API keys. One customer should never see another’s data.",
   },
   {
-    title: "Assume the vendor is down",
-    body: "Outboxes, idempotency keys and retries — integrations should heal on their own.",
+    title: "Plan for the vendor being down",
+    body: "Outboxes, idempotency keys and retries, so an integration catches up by itself after an outage.",
   },
   {
-    title: "Cache what’s expensive",
-    body: "Move heavy work off the request path, then measure whether it was worth it.",
+    title: "Cache only what costs something",
+    body: "Move expensive work off the request path, then check the numbers to see if it paid off.",
   },
   {
     title: "Tests are the spec",
-    body: "If it isn’t covered, it isn’t finished. CI is the second reviewer on every PR.",
+    body: "If there’s no test for it, it isn’t done. CI reviews every pull request before I do.",
   },
 ];
