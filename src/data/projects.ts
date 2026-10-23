@@ -18,7 +18,7 @@ export const projects: Project[] = [
     category: "SaaS",
     year: "2025",
     description:
-      "Tasks, time, clients, docs and finance in one place, split into workspaces so a day job, freelance clients and side projects stay separate. Built on a monorepo workspace engine and installable as a PWA.",
+      "Workspace SaaS that puts tasks, time, clients, docs and finance in one grid, with a separate workspace for every context. Installable as a PWA.",
     stack: ["Next.js 15", "React 19", "FastAPI", "Zustand", "PostgreSQL 16", "Redis 7", "PWA"],
     image: "/projects/workos.jpg",
     href: "https://dsgnphy.com/projects/workos/",
@@ -30,7 +30,7 @@ export const projects: Project[] = [
     category: "Conference",
     year: "2027",
     description:
-      "The official site for the 40th International Conference on VLSI Design, held at the Sheraton Grand in Bengaluru.",
+      "Official platform for the 40th International Conference on VLSI Design, at the Sheraton Grand, Bengaluru.",
     stack: ["WordPress", "Custom theme", "PHP"],
     image: "/projects/vlsid-2027.jpg",
     href: "https://dsgnphy.com/projects/vlsid-2027/",
@@ -41,7 +41,8 @@ export const projects: Project[] = [
     client: "Travel Kampany",
     category: "Travel & Tourism",
     year: "2025",
-    description: "A travel platform with an itinerary builder and a page for every destination.",
+    description:
+      "Travel platform with an itinerary builder and a showcase page for every destination.",
     stack: ["PHP", "Node.js", "Tailwind CSS"],
     image: "/projects/travel-kampany.jpg",
     href: "https://dsgnphy.com/projects/travel-kampany/",
@@ -53,7 +54,7 @@ export const projects: Project[] = [
     category: "Manufacturing",
     year: "2025",
     description:
-      "A website for a precast concrete manufacturer that leads with its products, its finished projects and what the plant can make.",
+      "Product-led website for a precast concrete manufacturer: products, delivered projects and plant capabilities.",
     stack: ["WordPress", "Custom theme", "PHP"],
     image: "/projects/excel-precast.jpg",
     href: "https://dsgnphy.com/projects/excel-precast/",
@@ -65,7 +66,7 @@ export const projects: Project[] = [
     category: "Conference",
     year: "2026",
     description:
-      "Built and ran the site for the 39th edition, held across two venues in Pune in January 2026.",
+      "Dual-venue conference site for the 39th edition in Pune, January 2026, built and run end to end.",
     stack: ["WordPress", "Custom theme", "PHP"],
     image: "/projects/vlsid-2026.jpg",
     href: "https://dsgnphy.com/projects/vlsid-2026/",
@@ -77,7 +78,7 @@ export const projects: Project[] = [
     category: "Architecture",
     year: "2025",
     description:
-      "A portfolio site for an architecture studio, kept spare so the projects and client testimonials carry it.",
+      "Sleek portfolio site for an architecture studio, built around its projects and client testimonials.",
     stack: ["WordPress", "Custom theme", "Vite"],
     image: "/projects/basics-co.jpg",
     href: "https://dsgnphy.com/projects/basics-co/",
@@ -88,8 +89,7 @@ export const projects: Project[] = [
     client: "3D Visual Solutions",
     category: "3D Visualisation",
     year: "2025",
-    description:
-      "A showcase for an architectural visualisation studio: photo-real renders, walkthroughs and drone mapping.",
+    description: "Showcase for photo-real architectural renders, walkthroughs and drone mapping.",
     stack: ["WordPress", "Custom theme", "PHP"],
     image: "/projects/3dvisual.jpg",
     href: "https://dsgnphy.com/projects/3dvisual/",

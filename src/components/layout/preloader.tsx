@@ -59,20 +59,21 @@ export function Preloader() {
     { scope: root },
   );
 
+  // Always a dark panel: slate + ivory in light theme, and the same pair (swapped tokens) in dark.
   return (
     <div
       ref={root}
       aria-hidden="true"
-      className="fixed inset-0 z-70 flex flex-col justify-between bg-ink p-[4vw] text-paper"
+      className="fixed inset-0 z-70 flex flex-col justify-between bg-ink p-[4vw] text-paper in-data-[theme=dark]:bg-paper in-data-[theme=dark]:text-ink"
     >
       <div data-loader-inner className="flex h-full flex-col justify-between">
-        <div className="eyebrow flex justify-between text-paper/60">
+        <div className="eyebrow flex justify-between opacity-60">
           <span>Vaibhav Kumar Saini</span>
           <span>Portfolio — Bengaluru</span>
         </div>
         <div>
           <div
-            className="mb-6 h-px w-full origin-left bg-paper/80"
+            className="mb-6 h-px w-full origin-left bg-current opacity-80"
             style={{ transform: "scaleX(0)" }}
             data-loader-bar
           />
@@ -80,7 +81,7 @@ export function Preloader() {
             <span ref={count} className="display text-[22vw] tabular-nums md:text-[14vw]">
               000
             </span>
-            <span className="eyebrow mb-[1.2vw] text-paper/60">Warming caches</span>
+            <span className="eyebrow mb-[1.2vw] opacity-60">Warming caches</span>
           </div>
         </div>
       </div>

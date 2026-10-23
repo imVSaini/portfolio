@@ -1,38 +1,115 @@
-export const toolkit = [
-  { group: "Languages", items: ["Python", "TypeScript", "JavaScript", "SQL"] },
+export type ToolGroup = {
+  group: string;
+  /** Margin doodle next to the tool count. */
+  doodle: string;
+  note: string;
+  /** Daily drivers — get the highlighter. */
+  featured?: string[];
+  items: string[];
+};
+
+export const toolkit: ToolGroup[] = [
+  {
+    group: "Languages",
+    doodle: "{ }",
+    featured: ["Python", "TypeScript"],
+    note: "The core toolbox — day-to-day.",
+    items: ["Python", "JavaScript (ES6+)", "TypeScript", "HTML5", "CSS3", "SCSS"],
+  },
   {
     group: "Backend",
-    items: ["FastAPI", "Django", "Flask", "Node.js", "Express", "Apollo GraphQL", "WebSockets"],
+    doodle: "⚙",
+    featured: ["FastAPI", "Node.js"],
+    note: "Async-first APIs, typed contracts, secure by default.",
+    items: [
+      "FastAPI",
+      "Pydantic",
+      "SQLAlchemy",
+      "Node.js",
+      "Express.js",
+      "REST APIs",
+      "GraphQL",
+      "JWT Authentication",
+      "Celery",
+      "WebSockets",
+    ],
   },
   {
-    group: "Data",
-    items: ["PostgreSQL", "pgvector", "MySQL", "MongoDB", "Redis", "SQLAlchemy 2.0"],
-  },
-  { group: "Messaging", items: ["Kafka", "RabbitMQ", "Celery", "Redis Pub/Sub"] },
-  { group: "AI / LLM", items: ["OpenAI APIs", "RAG", "LangChain", "LangGraph", "Tool calling"] },
-  {
-    group: "Cloud",
-    items: ["AWS — EC2, Lambda, S3, RDS", "Azure", "Docker", "Kubernetes", "GitHub Actions"],
-  },
-  { group: "Quality", items: ["Pytest", "Jest", "Supertest", "Playwright", "Ruff", "mypy"] },
-  { group: "Observability", items: ["Prometheus", "Grafana", "OpenTelemetry", "Sentry"] },
-];
-
-export const principles = [
-  {
-    title: "Tenants never share by accident",
-    body: "Separate schemas, scoped cache keys, scoped API keys. One customer should never see another’s data.",
+    group: "Frontend",
+    doodle: "✎",
+    featured: ["Next.js (App Router)", "React.js"],
+    note: "Next.js, React, and everything around them.",
+    items: [
+      "Next.js (App Router)",
+      "React.js",
+      "Redux",
+      "Zustand",
+      "Context API",
+      "Tailwind CSS",
+      "GSAP",
+    ],
   },
   {
-    title: "Plan for the vendor being down",
-    body: "Outboxes, idempotency keys and retries, so an integration catches up by itself after an outage.",
+    group: "Data & Infra",
+    doodle: "⛁",
+    featured: ["PostgreSQL", "Docker"],
+    note: "Where the state lives — and how it ships.",
+    items: [
+      "PostgreSQL",
+      "Redis",
+      "Docker",
+      "Docker Compose",
+      "Nginx",
+      "AWS EC2",
+      "AWS S3",
+      "GitHub Actions (CI/CD)",
+    ],
   },
   {
-    title: "Cache only what costs something",
-    body: "Move expensive work off the request path, then check the numbers to see if it paid off.",
+    group: "AI Developer Tools",
+    doodle: "✦",
+    featured: ["Cursor", "Claude Code"],
+    note: "AI-native workflow — used daily, not for demos.",
+    items: [
+      "Cursor",
+      "Claude Code",
+      "Devin (formerly Windsurf)",
+      "Kiro",
+      "Antigravity",
+      "GitHub Copilot",
+      "ChatGPT",
+      "Ollama",
+    ],
   },
   {
-    title: "Tests are the spec",
-    body: "If there’s no test for it, it isn’t done. CI reviews every pull request before I do.",
+    group: "Tooling",
+    doodle: "✂",
+    featured: ["Git", "GitHub"],
+    note: "Everyday keyboard companions.",
+    items: ["Git", "GitHub", "Webpack", "Vite", "Postman", "Vercel", "Linux", "Linear"],
+  },
+  {
+    group: "Architecture",
+    doodle: "▦",
+    note: "How the code is organized.",
+    items: [
+      "Component-Driven Development",
+      "Micro-Frontend",
+      "Responsive Design",
+      "Performance Optimization",
+    ],
+  },
+  {
+    group: "Practices",
+    doodle: "✓",
+    featured: ["Code Review"],
+    note: "How the work gets shipped.",
+    items: [
+      "Agile / Scrum",
+      "Code Review",
+      "Technical Documentation",
+      "Team Mentorship",
+      "Cross-functional Collaboration",
+    ],
   },
 ];

@@ -10,7 +10,7 @@ export function BackToStart() {
     <button
       type="button"
       onClick={() => scrollTo(0)}
-      className="text-left text-paper md:text-right"
+      className="text-left text-ink hover:text-signal"
     >
       <span className="link-line">Back to start</span> {orientation === "horizontal" ? "←" : "↑"}
     </button>

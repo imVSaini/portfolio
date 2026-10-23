@@ -36,6 +36,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       mm.add({ desktop: DESKTOP, mobile: MOBILE, reduced: REDUCED }, (context) => {
         const { desktop, reduced } = context.conditions as Record<string, boolean>;
         const horizontal = desktop;
+        const cleanups: Array<() => void> = [];
 
         window.scrollTo(0, 0);
         store.setOrientation(horizontal ? "horizontal" : "vertical");
@@ -104,8 +105,13 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
         if (!reduced) {
           const intro = gsap.timeline({ defaults: { ease: "expo.out" } });
           gsap.utils.toArray<HTMLElement>("[data-intro-split]").forEach((el, i) => {
-            const split = SplitText.create(el, { type: "chars", mask: "chars" });
-            intro.from(split.chars, { yPercent: 110, duration: 1.4, stagger: 0.035 }, i * 0.12);
+            // Words are "inked" in: a small drop and rotation, like letters set down by hand.
+            const split = SplitText.create(el, { type: "words" });
+            intro.from(
+              split.words,
+              { autoAlpha: 0, yPercent: 40, rotation: 4, duration: 1, stagger: 0.07 },
+              i * 0.18,
+            );
           });
           intro.from("[data-intro-fade]", { autoAlpha: 0, y: 16, duration: 1, stagger: 0.08 }, 0.5);
 
@@ -129,15 +135,25 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
             });
           });
 
-          // Slow drift on the big hero name as it leaves.
-          if (horizontal) {
-            gsap.to("[data-hero-name]", {
-              xPercent: -6,
-              ease: "none",
-              scrollTrigger: { trigger: "[data-hero-name]", start: "left left", scrub: true },
-            });
-          }
+          // The hero atom spins with the whole journey.
+          gsap.to("[data-rotor]", {
+            rotation: 300,
+            svgOrigin: "0 0",
+            ease: "none",
+            scrollTrigger: { start: 0, end: "max", scrub: 0.8 },
+          });
         }
+
+        // --- Highlighter swipes + stat rings --------------------------------------------------
+        gsap.utils.toArray<HTMLElement>("[data-lit]").forEach((el) => {
+          if (reduced) return el.classList.add("is-lit");
+          ScrollTrigger.create({
+            trigger: el,
+            start: horizontal ? "left 80%" : "top 80%",
+            once: true,
+            onEnter: () => el.classList.add("is-lit"),
+          });
+        });
 
         // Keyboard: down/up keys should move along the x-axis too.
         const onKey = (e: KeyboardEvent) => {
@@ -161,6 +177,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
           e.preventDefault();
         };
         window.addEventListener("keydown", onKey);
+        cleanups.push(() => window.removeEventListener("keydown", onKey));
 
         // Pin spacing changes the strip's length; let Locomotive re-measure its in-view and
         // parallax offsets whenever ScrollTrigger does (same idea as the v4 pen's `update()`).
@@ -170,7 +187,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
 
         return () => {
           ScrollTrigger.removeEventListener("refresh", onRefresh);
-          window.removeEventListener("keydown", onKey);
+          cleanups.forEach((fn) => fn());
           store.registerScrollTo(null);
           loco.destroy();
           document.documentElement.removeAttribute("data-scroll-orientation");

@@ -1,17 +1,42 @@
 @import "tailwindcss";
 @import "locomotive-scroll/locomotive-scroll.css";
 
+/* Palette: warm gray scale (ivory → slate), clay accent, and illustration hues
+   (cactus, sky, heather, plum, mineral, peach). Layout language: pencil sketchbook. */
 @theme {
-  --color-paper: #ebe7de;
-  --color-paper-dim: #d9d4c8;
-  --color-ink: #121311;
-  --color-ink-soft: #1d1f1c;
-  --color-ash: #85827a;
-  --color-signal: #e4481d;
+  --color-paper: #faf9f5; /* gray-050 — the page */
+  --color-card: #ffffff; /* gray-000 — cards, notes */
+  --color-paper-dim: #f0eee6; /* gray-150 — tracks, image wells */
+  --color-ink: #141413; /* gray-950 — text, strokes */
+  --color-ink-soft: #5e5d59; /* gray-600 — body copy */
+  --color-ash: #87867f; /* gray-500 — tertiary */
+  --color-signal: #d97757; /* clay */
+  --color-clay-deep: #c6613f; /* clay-hover */
+  --color-oat: #e8e6dc; /* gray-200 — tape, sticky notes, badges */
+  --color-mineral: #629987;
+  --color-plum: #827dbd;
+  --color-cactus: #bcd1ca;
+  --color-sky: #6a9bcc;
+  --color-heather: #cbcadb;
+  --color-peach: #ebc9b7;
 
-  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-instrument), ui-serif, Georgia, serif;
-  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-head: var(--font-kalam), "Comic Sans MS", cursive;
+  --font-hand: var(--font-caveat), "Comic Sans MS", cursive;
+  /* Accent "serif" slots render in the hand font so italics read as pencil notes. */
+  --font-serif: var(--font-caveat), "Comic Sans MS", cursive;
+
+  --radius-sketchy: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  --radius-sketchy-2: 15px 255px 15px 225px / 225px 15px 255px 15px;
+  --radius-blob: 58% 42% 55% 45% / 45% 55% 42% 58%;
+
+  /* Text on clay stays dark in both themes. */
+  --color-on-clay: #141413;
+
+  --shadow-ink: 4px 5px 0 var(--shadow-color);
+  --shadow-ink-lg: 7px 8px 0 var(--shadow-color);
+  --shadow-btn: 3px 4px 0 var(--color-ink);
+  --shadow-note: 0 10px 18px -12px rgb(0 0 0 / 0.5);
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
@@ -28,30 +53,73 @@
   }
 }
 
+/* Short desktop windows (≤ 800px tall) — tighter vertical rhythm. */
+@custom-variant short (@media (width >= 48rem) and (height <= 880px));
+
 @layer base {
   :root {
     color-scheme: light;
     -webkit-tap-highlight-color: transparent;
+    --header-h: 72px;
+    --shadow-color: rgb(20 20 19 / 0.9);
+    /* The shared top line: every section's first text block starts here on desktop. */
+    --top-gap: 8vh;
+    --top-line: calc(var(--header-h) + var(--top-gap));
+  }
+
+  /* Headings break into even lines; body copy avoids one-word last lines. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  p,
+  li {
+    text-wrap: pretty;
+  }
+
+  /* Dark theme — slate page, ivory ink, the same clay accent. Set on <html>
+     by the inline script in layout.tsx before first paint, then by <ThemeToggle>. */
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --color-paper: #141413; /* gray-950 */
+    --color-card: #262624; /* gray-800 */
+    --color-paper-dim: #30302e; /* gray-750 */
+    --color-ink: #faf9f5; /* gray-050 */
+    --color-ink-soft: #9c9a92; /* gray-450 */
+    --color-ash: #87867f; /* gray-500 */
+    --color-oat: #3d3d3a; /* gray-700 */
+    /* Illustration washes are the light hues sunk into the page, so they read as tints. */
+    --color-cactus: color-mix(in srgb, #bcd1ca 24%, #141413);
+    --color-heather: color-mix(in srgb, #cbcadb 22%, #141413);
+    --shadow-color: rgb(0 0 0 / 0.6);
   }
 
   html {
-    background: var(--color-ink);
+    background: var(--color-paper);
   }
 
   body {
-    @apply bg-paper font-sans text-ink antialiased;
+    @apply font-sans text-ink antialiased;
+    background-color: var(--color-paper);
+    transition:
+      background-color 0.4s ease,
+      color 0.4s ease;
+    font-size: 16.5px;
+    line-height: 1.6;
     font-synthesis: none;
     text-rendering: optimizeLegibility;
   }
 
   ::selection {
-    background: var(--color-signal);
-    color: var(--color-paper);
+    background: rgb(217 119 87 / 0.35);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-signal);
-    outline-offset: 3px;
+    outline: 2px dashed var(--color-signal);
+    outline-offset: 4px;
   }
 
   /* Desktop runs the whole page along the x-axis (Locomotive / Lenis, orientation: horizontal). */
@@ -79,33 +147,205 @@
 }
 
 @layer components {
-  /* A label in mono, used for indices and meta info: "(02) Experience" */
+  /* Small pencil label — "fig. 01 — about me", meta lines, footers. */
   .eyebrow {
-    @apply font-mono text-[0.6875rem] tracking-[0.08em] uppercase;
+    font-family: var(--font-hand);
+    font-size: 1.3rem;
+    line-height: 1.25;
   }
 
-  /* Condensed display face — Archivo's width axis pulled in. */
+  /* Display headings — chunky marker (Kalam 700). */
   .display {
-    font-family: var(--font-archivo);
-    font-variation-settings: "wdth" 62;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    line-height: 0.82;
-    text-transform: uppercase;
+    font-family: var(--font-head);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 0.9;
+  }
+
+  .title {
+    font-family: var(--font-head);
+    font-weight: 700;
+    /* Height-aware so headings leave room for the landscape on short, wide screens. */
+    font-size: clamp(2rem, min(3.6vw, 5.8vh), 3.3rem);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+
+  /* Highlighter swipe — grows in once an ancestor (or itself) gets .is-lit. */
+  .hl {
+    background-image: linear-gradient(
+      100deg,
+      rgb(217 119 87 / 0) 0%,
+      rgb(217 119 87 / 0.38) 4%,
+      rgb(217 119 87 / 0.3) 96%,
+      rgb(217 119 87 / 0) 100%
+    );
+    background-repeat: no-repeat;
+    background-position: 0 88%;
+    background-size: 0% 42%;
+    padding: 0 4px;
+    margin: 0 -4px;
+    box-decoration-break: clone;
+    transition: background-size 1s 0.35s cubic-bezier(0.6, 0, 0.2, 1);
+  }
+
+  .is-lit .hl,
+  .hl.is-lit {
+    background-size: 100% 42%;
+  }
+
+  .hl--mineral {
+    background-image: linear-gradient(
+      100deg,
+      rgb(98 153 135 / 0) 0%,
+      rgb(98 153 135 / 0.34) 4%,
+      rgb(98 153 135 / 0.28) 96%,
+      rgb(98 153 135 / 0) 100%
+    );
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 1.05rem;
+    line-height: 1.4;
+    color: var(--color-on-clay);
+    background: var(--color-signal);
+    border: 2px solid var(--color-ink);
+    border-radius: var(--radius-sketchy);
+    padding: 11px 22px;
+    box-shadow: var(--shadow-btn);
+    cursor: pointer;
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s,
+      background-color 0.2s;
+  }
+
+  .btn:hover {
+    background: var(--color-clay-deep);
+    transform: translate(-2px, -2px) rotate(-1deg);
+    box-shadow: 5px 6px 0 var(--color-ink);
+  }
+
+  .btn:active {
+    transform: translate(2px, 3px);
+    box-shadow: 1px 1px 0 var(--color-ink);
+  }
+
+  .btn--ghost {
+    background: var(--color-card);
+    color: var(--color-ink);
+  }
+
+  .btn--ghost:hover {
+    background: var(--color-paper-dim);
+  }
+
+  .btn--small {
+    padding: 6px 16px;
+    font-size: 0.95rem;
+  }
+
+  .card {
+    position: relative;
+    background: var(--color-card);
+    border: 2px solid var(--color-ink);
+    border-radius: var(--radius-sketchy);
+    padding: 24px 26px;
+    box-shadow: var(--shadow-ink);
+    rotate: var(--tilt, 0deg);
+  }
+
+  .card--taped::before {
+    content: "";
+    position: absolute;
+    top: -13px;
+    left: 50%;
+    width: 92px;
+    height: 26px;
+    translate: -50% 0;
+    rotate: -3deg;
+    background: color-mix(in srgb, var(--color-oat) 85%, transparent);
+    border-inline: 1px dashed color-mix(in srgb, var(--color-ink) 20%, transparent);
+  }
+
+  .card--lift {
+    transition:
+      box-shadow 0.25s,
+      translate 0.25s;
+  }
+
+  .card--lift:hover {
+    translate: -3px -3px;
+    box-shadow: var(--shadow-ink-lg);
+  }
+
+  .note {
+    background: var(--color-oat);
+    padding: 18px 20px;
+    border-radius: 2px 2px 26px 2px;
+    box-shadow: var(--shadow-note);
+    rotate: var(--tilt, 0deg);
+  }
+
+  .chip {
+    display: inline-block;
+    border: 1.5px dashed color-mix(in srgb, var(--color-ink) 45%, transparent);
+    border-radius: var(--radius-sketchy);
+    padding: 0 9px;
+    font-size: 0.8125rem;
+    line-height: 1.5rem;
+    color: var(--color-ink-soft);
+  }
+
+  .chip--featured {
+    border-style: solid;
+    border-color: var(--color-ink);
+    background: rgb(217 119 87 / 0.28);
+    color: var(--color-ink);
+    font-weight: 500;
+  }
+
+  /* Hand-drawn check marks. */
+  .ticks {
+    display: grid;
+    gap: 10px;
+  }
+
+  .ticks li {
+    position: relative;
+    padding-left: 32px;
+  }
+
+  .ticks li::before {
+    content: "";
+    position: absolute;
+    left: 2px;
+    top: 5px;
+    width: 18px;
+    height: 10px;
+    border-left: 2.5px solid var(--color-mineral);
+    border-bottom: 2.5px solid var(--color-mineral);
+    transform: rotate(-48deg);
+    border-radius: 2px;
   }
 
   .link-line {
     background-image: linear-gradient(currentColor, currentColor);
     background-position: 100% 100%;
     background-repeat: no-repeat;
-    background-size: 0% 1px;
+    background-size: 0% 2px;
     transition: background-size 0.6s var(--ease-out-expo);
   }
 
   .link-line:hover,
   .link-line:focus-visible {
     background-position: 0% 100%;
-    background-size: 100% 1px;
+    background-size: 100% 2px;
   }
 
   /* Project frames wipe open when Locomotive marks them in view. */
@@ -118,21 +358,105 @@
     clip-path: inset(0 0 0 0);
   }
 
-  /* Paper grain — a tiny inline SVG noise, keeps flat fills from feeling digital. */
+  /* Lines are split at measure time; a small difference at paint time must not re-wrap them
+     (that orphaned single words like "Tell" on their own line). */
+  [data-reveal] > * {
+    white-space: nowrap;
+    /* SplitText's mask sets an inline overflow: clip; keep the vertical clip for the
+       slide-up, but let a few px of overhang through on the right. */
+    overflow-x: visible !important;
+    overflow-y: clip !important;
+  }
+
+  /* SplitText masks need a little room for the marker font's descenders. */
+  .w-mask {
+    padding: 0 0.06em 0.16em;
+    margin: 0 -0.06em -0.16em;
+  }
+
+  /* Paper grain over everything. */
   .grain::after {
     content: "";
     pointer-events: none;
     position: fixed;
-    inset: -50%;
+    inset: 0;
     z-index: 60;
-    opacity: 0.06;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.35;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3  0 0 0 0 .28  0 0 0 0 .25  0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
+
+  /* The clay highlighter needs a little more ink to read on slate. */
+  :root[data-theme="dark"] .hl {
+    background-image: linear-gradient(
+      100deg,
+      rgb(217 119 87 / 0) 0%,
+      rgb(217 119 87 / 0.5) 4%,
+      rgb(217 119 87 / 0.42) 96%,
+      rgb(217 119 87 / 0) 100%
+    );
+  }
+
+  :root[data-theme="dark"] .grain::after {
+    mix-blend-mode: screen;
+    opacity: 0.1;
+  }
+}
+
+/* Pencil strokes for the inline SVG drawings. */
+.ink {
+  fill: none;
+  stroke: var(--color-ink);
+  stroke-width: 2.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ink.ghost {
+  stroke-width: 1.1;
+  opacity: 0.5;
+}
+
+.ink.thin {
+  stroke-width: 1.3;
+}
+
+.ink.clay {
+  stroke: var(--color-signal);
+}
+
+.ink.sky {
+  stroke: var(--color-sky);
+}
+
+.ink.mineral {
+  stroke: var(--color-mineral);
+}
+
+/* Rings around the stats draw themselves in when lit. */
+[data-ring] path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 1.1s 0.2s cubic-bezier(0.6, 0, 0.3, 1);
+}
+
+.is-lit [data-ring] path {
+  stroke-dashoffset: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .frame-reveal {
     clip-path: none;
     transition: none;
+  }
+
+  .hl {
+    transition: none;
+    background-size: 100% 42%;
+  }
+
+  [data-ring] path {
+    transition: none;
+    stroke-dashoffset: 0;
   }
 }

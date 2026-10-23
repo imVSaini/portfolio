@@ -1,31 +1,15 @@
 import type { Metadata, Viewport } from "next";
-import { Archivo, Instrument_Serif, JetBrains_Mono } from "next/font/google";
+import { Caveat, DM_Sans, Kalam } from "next/font/google";
 import { Header } from "@/components/layout/header";
+import { Landscape } from "@/components/layout/landscape";
 import { Preloader } from "@/components/layout/preloader";
 import { profile } from "@/data/profile";
+import { themeBootScript } from "@/store/use-theme-store";
 import "./globals.css";
 
-const archivo = Archivo({
-  variable: "--font-archivo",
-  subsets: ["latin"],
-  axes: ["wdth"],
-  display: "swap",
-});
-
-const instrument = Instrument_Serif({
-  variable: "--font-instrument",
-  subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
-  display: "swap",
-});
-
-const jetbrains = JetBrains_Mono({
-  variable: "--font-jetbrains",
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  display: "swap",
-});
+const kalam = Kalam({ variable: "--font-kalam", weight: ["400", "700"], subsets: ["latin"] });
+const caveat = Caveat({ variable: "--font-caveat", weight: ["500", "700"], subsets: ["latin"] });
+const dmSans = DM_Sans({ variable: "--font-dm-sans", subsets: ["latin"] });
 
 const description = `${profile.name}, ${profile.role} in ${profile.location}. ${profile.intro}`;
 
@@ -34,7 +18,17 @@ export const metadata: Metadata = {
   title: `${profile.name} — ${profile.role}`,
   description,
   authors: [{ name: profile.name }],
-  keywords: ["Backend engineer", "FastAPI", "Python", "PostgreSQL", "SaaS", "Bengaluru"],
+  keywords: [
+    "Full-stack engineer",
+    "Lead software engineer",
+    "Next.js",
+    "React",
+    "FastAPI",
+    "Python",
+    "PostgreSQL",
+    "SaaS",
+    "Bengaluru",
+  ],
   openGraph: {
     title: profile.name,
     description,
@@ -44,23 +38,30 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#121311",
+  themeColor: "#faf9f5",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${archivo.variable} ${instrument.variable} ${jetbrains.variable} antialiased`}
+      className={`${kalam.variable} ${caveat.variable} ${dmSans.variable} antialiased`}
+      suppressHydrationWarning
     >
+      <head>
+        {/* Blocking on purpose: sets data-theme before first paint, so there is no theme flash.
+            (next/script's beforeInteractive defers inline code until the runtime loads.) */}
+        <script dangerouslySetInnerHTML={{ __html: themeBootScript }} />
+      </head>
       <body className="grain">
         <a
           href="#index"
-          className="sr-only z-80 bg-signal px-3 py-2 text-paper focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+          className="sr-only z-80 border-2 border-ink bg-signal px-4 py-2 text-on-clay focus:not-sr-only focus:fixed focus:top-4 focus:left-4"
         >
           Skip to content
         </a>
         <Preloader />
+        <Landscape />
         <Header />
         {children}
       </body>

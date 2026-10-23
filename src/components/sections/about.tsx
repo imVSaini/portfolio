@@ -1,46 +1,95 @@
+import type { CSSProperties } from "react";
 import { profile } from "@/data/profile";
+import { Bulb, Ring } from "@/components/ui/sketches";
+
+const TILTS = ["-1deg", "0.8deg", "0.6deg", "-0.9deg"];
+const DRIFT = [0.03, -0.02, 0.04, -0.03];
+
+/** Splits `text` around `phrase` so the phrase can carry the highlighter. */
+function withHighlight(text: string, phrase: string) {
+  const at = text.indexOf(phrase);
+  if (at < 0) return text;
+  return (
+    <>
+      {text.slice(0, at)}
+      <span className="hl">{phrase}</span>
+      {text.slice(at + phrase.length)}
+    </>
+  );
+}
 
 export function About() {
   return (
     <section
       id="about"
       data-section="about"
-      className="relative flex min-h-svh flex-col justify-between gap-16 bg-ink px-[4vw] py-24 text-paper md:h-svh md:w-[112vw] md:flex-row md:gap-[6vw] md:py-32"
+      className="relative flex min-h-svh flex-col gap-20 px-[6vw] py-24 md:h-svh md:w-max md:flex-row md:items-start md:gap-[6vw] md:px-[5vw] md:pt-(--top-line) md:pb-[20vh]"
     >
-      <div className="flex flex-col justify-between gap-10 md:w-[46vw]">
-        <p className="eyebrow text-paper/50">(01) About</p>
-        <p
-          data-reveal
-          className="font-serif text-[2.4rem] leading-[1.02] tracking-[-0.01em] text-balance md:text-[min(7.2vh,4.4vw)]"
-        >
-          {profile.statement}
+      {/* fig. 02 — the statement */}
+      <div className="md:w-[34vw]" data-lit>
+        <p className="eyebrow mb-3 text-mineral">fig. 02 — why I draw</p>
+        <p className="font-head text-[1.7rem] leading-[1.32] md:text-[min(2.1vw,4vh)]">
+          {withHighlight(profile.statement, profile.statementHighlight)}
         </p>
-        <p className="max-w-136 text-base leading-relaxed text-paper/70" data-reveal>
-          {profile.now}
+        <p className="mt-6 text-[1.02rem] leading-relaxed text-ink-soft" data-reveal>
+          {profile.lead}
         </p>
       </div>
 
-      <div className="flex flex-col justify-end md:w-[52vw]">
-        <dl className="grid grid-cols-2 border-t border-paper/15">
-          {profile.stats.map((stat, i) => (
-            <div
-              key={stat.label}
-              className={`flex flex-col justify-between gap-10 border-b border-paper/15 py-6 md:py-8 ${i % 2 === 0 ? "border-r pr-6" : "pl-6 md:pl-8"}`}
-            >
-              <dt className="eyebrow order-2 text-paper/50">{stat.label}</dt>
-              <dd className="display order-1 text-[18vw] md:text-[min(17vh,10vw)]">
-                {stat.value.startsWith("−") ? (
-                  <>
-                    <span className="text-signal">−</span>
-                    {stat.value.slice(1)}
-                  </>
-                ) : (
-                  stat.value
-                )}
-              </dd>
-            </div>
+      {/* fig. 03 — the footprint */}
+      <div className="relative md:w-[32vw]" data-lit>
+        <Bulb className="absolute top-[-22vh] right-0 hidden w-28 md:block" lit />
+        <p className="eyebrow mb-3 text-mineral">fig. 03 — the footprint</p>
+        <h2 className="title mb-10 short:mb-6">
+          My footprint, <span className="hl">measured in shipped code</span>
+        </h2>
+        <ul className="grid grid-cols-2 gap-x-6 gap-y-10 short:gap-y-5">
+          {profile.stats.map((s, i) => (
+            <li key={s.label} data-scroll data-scroll-speed={String(DRIFT[i])}>
+              <p className="relative inline-flex items-baseline gap-1 px-3.5 py-2 font-hand text-[clamp(3rem,min(4.4vw,7.5vh),4.2rem)] leading-none font-bold">
+                <span>{s.value}</span>
+                {s.unit && <small className="text-[0.5em] text-ink-soft">{s.unit}</small>}
+                <Ring variant={i} />
+              </p>
+              <p className="mt-2 pl-3.5 font-head text-ink-soft">{s.label}</p>
+            </li>
           ))}
-        </dl>
+        </ul>
+      </div>
+
+      {/* fig. 04 — about me */}
+      <div className="md:w-[42vw]" data-lit>
+        <p className="eyebrow mb-3 text-mineral">fig. 04 — about me</p>
+        <h2 className="title mb-10">
+          Software should be <span className="hl">the calm part</span> of your business.
+        </h2>
+        <ul className="grid gap-x-6 gap-y-8 sm:grid-cols-2">
+          {profile.pillars.map((p, i) => (
+            <li
+              key={p.title}
+              className="card card--taped"
+              style={{ "--tilt": TILTS[i] } as CSSProperties}
+            >
+              <h3 className="mb-1.5 font-head text-xl leading-tight font-bold">{p.title}</h3>
+              <p className="text-[0.95rem] text-ink-soft">{p.text}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* How I work */}
+      <div className="md:w-[26vw]">
+        <h3 className="mb-2.5 font-hand text-[2.4rem] leading-none font-bold">
+          {profile.howIWork.title}
+        </h3>
+        <p className="text-ink-soft" data-reveal>
+          {profile.howIWork.story}
+        </p>
+        <ul className="ticks mt-5">
+          {profile.howIWork.ticks.map((tick) => (
+            <li key={tick}>{tick}</li>
+          ))}
+        </ul>
       </div>
     </section>
   );

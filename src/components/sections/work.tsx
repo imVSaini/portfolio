@@ -1,40 +1,44 @@
+import type { CSSProperties } from "react";
 import Image from "next/image";
 import { projects, type Project } from "@/data/projects";
+import { Birds, Cloud } from "@/components/ui/sketches";
 import { cn } from "@/lib/cn";
 
 const pad = (n: number) => String(n).padStart(2, "0");
+const TILTS = ["-0.9deg", "0.7deg", "-0.5deg", "1deg"];
 
 export function Work() {
   return (
     <div
-      id="work"
-      data-section="work"
-      className="bg-ink text-paper md:flex md:h-svh md:w-max md:items-stretch"
+      id="projects"
+      data-section="projects"
+      className="relative md:flex md:h-svh md:w-max md:items-start"
     >
-      <header className="flex flex-col justify-between gap-10 px-[4vw] pt-24 pb-12 md:w-max md:pt-32 md:pr-[6vw] md:pb-24">
-        <p className="eyebrow text-paper/50">(03) Selected work</p>
-        <h2 className="display text-[30vw] md:text-[min(40vh,20vw)] md:whitespace-nowrap">
-          Work
-          <sup className="ml-2 align-top font-mono text-[0.12em] font-normal tracking-normal text-signal">
-            {pad(projects.length)}
-          </sup>
+      <header
+        className="relative px-[6vw] pt-24 pb-12 md:w-[34vw] md:pt-(--top-line) md:pr-[3vw] md:pb-0 md:pl-[5vw]"
+        data-lit
+      >
+        <Cloud className="absolute top-[calc(100%+10vh)] left-[46%] hidden w-32 md:block" />
+        <Birds className="absolute top-[calc(100%+4vh)] left-[16%] hidden w-20 md:block" />
+        <p className="eyebrow mb-3 text-mineral">fig. 07 — selected work</p>
+        <h2 className="title">
+          {projects.length} favourites, <span className="hl">one sketchbook.</span>
         </h2>
-        <p className="max-w-[24rem] text-base leading-relaxed text-paper/65" data-reveal>
-          Seven recent builds, from a workspace SaaS on FastAPI and Next.js to conference platforms
-          and studio websites.
+        <p className="mt-4 font-hand text-2xl leading-snug text-plum">
+          every page links to its case study ↗
         </p>
       </header>
 
-      <ol className="md:flex md:h-full">
+      <ol className="flex flex-col gap-16 px-[6vw] pb-20 md:h-full md:flex-row md:items-start md:gap-[3.5vw] md:px-0 md:pt-[calc(var(--top-line)+13px)] md:pr-[6vw] md:pb-0">
         {projects.map((project, i) => (
-          <ProjectPanel key={project.slug} project={project} index={i} total={projects.length} />
+          <ProjectCard key={project.slug} project={project} index={i} total={projects.length} />
         ))}
       </ol>
     </div>
   );
 }
 
-function ProjectPanel({
+function ProjectCard({
   project,
   index,
   total,
@@ -43,72 +47,63 @@ function ProjectPanel({
   index: number;
   total: number;
 }) {
-  const flip = index % 2 === 1;
-
   return (
     <li
       className={cn(
-        "group flex flex-col gap-6 border-t border-paper/10 px-[4vw] py-12 md:h-full md:w-[min(64vw,150vh)] md:border-t-0 md:border-l md:py-24 md:pr-[3vw] md:pl-[3vw]",
-        flip && "md:flex-col-reverse",
+        "card card--taped card--lift group shrink-0 p-4 md:w-[min(40vw,92vh)] md:p-5",
+        index % 2 === 1 && "md:translate-y-[3vh]",
       )}
+      style={{ "--tilt": TILTS[index % TILTS.length] } as CSSProperties}
     >
       <a
         href={project.href}
         target="_blank"
         rel="noreferrer"
-        className="relative block aspect-16/10 overflow-hidden bg-ink-soft md:aspect-auto md:h-[46vh]"
+        className="relative block aspect-16/10 overflow-hidden rounded-[3px] border-2 border-ink bg-paper-dim md:aspect-auto md:h-[31vh] short:h-[27vh]"
         aria-label={`${project.title} — case study (opens in a new tab)`}
       >
         <span data-scroll className="frame-reveal absolute inset-0 block">
           <span
             data-scroll
-            data-scroll-speed="0.06"
+            data-scroll-speed="0.05"
             className="absolute inset-y-0 left-[-10%] block w-[120%]"
           >
             <Image
               src={project.image}
               alt=""
               fill
-              sizes="(min-width: 768px) 64vw, 92vw"
+              sizes="(min-width: 768px) 40vw, 92vw"
               quality={85}
               className="object-cover object-top transition-transform duration-[1.4s] ease-out-expo group-hover:scale-[1.04]"
             />
           </span>
         </span>
-        <span className="eyebrow absolute top-4 left-4 bg-paper px-2 py-1 text-ink">
-          {pad(index + 1)} / {pad(total)}
-        </span>
       </a>
 
-      <div className="grid gap-5 md:grid-cols-[1fr_auto] md:gap-x-10">
-        <div>
-          <p className="eyebrow mb-3 flex gap-4 text-paper/50">
-            <span>{project.category}</span>
-            <span>{project.year}</span>
-          </p>
-          <h3 className="display text-[15vw] md:text-[min(13vh,7vw)]">
-            <a href={project.href} target="_blank" rel="noreferrer" className="hover:text-signal">
-              {project.title}
-            </a>
-          </h3>
-          <p className="mt-2 font-serif text-xl text-paper/60 italic">{project.client}</p>
-        </div>
-        <div className="flex flex-col justify-end gap-4 md:max-w-88">
-          <p className="text-[0.9375rem] leading-relaxed text-paper/75">{project.description}</p>
-          <ul className="eyebrow flex flex-wrap gap-x-3 gap-y-1 text-paper/45">
-            {project.stack.map((tech) => (
-              <li key={tech}>{tech}</li>
-            ))}
-          </ul>
-          <a
-            href={project.href}
-            target="_blank"
-            rel="noreferrer"
-            className="eyebrow mt-1 self-start text-paper"
-            tabIndex={-1}
-          >
-            <span className="link-line">Case study</span> ↗
+      <div className="px-1.5 pt-4">
+        <p className="eyebrow flex justify-between text-mineral">
+          <span>
+            fig. 07.{pad(index + 1)} — {project.category.toLowerCase()}, {project.year}
+          </span>
+          <span className="text-ink-soft">
+            {pad(index + 1)} / {pad(total)}
+          </span>
+        </p>
+        <h3 className="mt-1 font-head text-[1.75rem] leading-tight font-bold">
+          <a href={project.href} target="_blank" rel="noreferrer" className="hover:text-signal">
+            {project.title}
           </a>
+        </h3>
+        <p className="font-head text-mineral">@ {project.client}</p>
+        <p className="mt-2 text-[0.95rem] leading-relaxed text-ink-soft">{project.description}</p>
+        <p className="mt-2 font-hand text-[1.25rem] leading-snug text-plum">
+          {project.stack.join(" · ")}
+        </p>
+        <div className="mt-3 flex items-end justify-between">
+          <a href={project.href} target="_blank" rel="noreferrer" className="btn btn--small">
+            Case study ↗
+          </a>
+          <span className="font-hand text-lg text-ink-soft">drawn with love</span>
         </div>
       </div>
     </li>

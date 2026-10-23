@@ -1,51 +1,58 @@
-import { principles, toolkit } from "@/data/toolkit";
+import type { CSSProperties } from "react";
+import { toolkit } from "@/data/toolkit";
+import { cn } from "@/lib/cn";
+
+const TILTS = ["-0.8deg", "0.7deg", "0.5deg", "-0.6deg", "-0.4deg", "0.9deg", "0.6deg", "-0.7deg"];
 
 export function Toolkit() {
   return (
     <section
-      id="toolkit"
-      data-section="toolkit"
-      className="flex min-h-svh flex-col gap-14 bg-paper px-[4vw] py-24 text-ink md:h-svh md:w-max md:flex-row md:gap-[5vw] md:py-32"
+      id="skills"
+      data-section="skills"
+      className="relative flex min-h-svh flex-col gap-14 px-[6vw] py-24 md:h-svh md:w-max md:flex-row md:items-start md:gap-[4vw] md:px-[5vw] md:pt-(--top-line) md:pb-0"
     >
-      <div className="flex flex-col justify-between gap-8 md:w-[30vw]">
-        <p className="eyebrow text-ink/50">(04) Toolkit</p>
-        <h2 className="font-serif text-[3.25rem] leading-[0.95] tracking-[-0.02em] md:text-[min(10vh,5.5vw)]">
-          What I build with, <em className="text-signal">and how.</em>
+      <div className="md:w-[min(34vw,36rem)]" data-lit>
+        <p className="eyebrow mb-3 text-mineral">fig. 05 — what’s in the pencil case</p>
+        <h2 className="title mb-6">
+          Tools I trust, <span className="hl">sharpened over 5+ years.</span>
         </h2>
-        <p className="max-w-104 text-base leading-relaxed text-ink/70" data-reveal>
-          Python and PostgreSQL carry most of it. I add anything else only when it makes a system
-          simpler to reason about or harder to break.
+        <p className="text-[1.05rem] leading-relaxed text-ink-soft" data-reveal>
+          From Python services and Node APIs to React interfaces, cloud infrastructure and
+          LLM‑powered features — the full stack, end to end.
         </p>
       </div>
 
-      {/* Tool groups flow into columns along the x-axis on desktop. */}
-      <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:h-full md:auto-cols-[minmax(11rem,13vw)] md:grid-flow-col md:grid-rows-2 md:gap-x-[3vw] md:gap-y-0">
-        {toolkit.map(({ group, items }, i) => (
-          <div key={group} className="border-t border-ink/20 pt-4 md:pb-8">
-            <p className="eyebrow mb-5 flex justify-between text-ink/50">
-              <span>{group}</span>
-              <span>{String(i + 1).padStart(2, "0")}</span>
-            </p>
-            <ul className="space-y-1.5 text-[1.0625rem] leading-snug">
-              {items.map((item) => (
-                <li key={item}>{item}</li>
+      {/* Cards flow into columns along the x-axis on desktop. */}
+      <ul className="grid gap-x-7 gap-y-9 sm:grid-cols-2 md:mt-3.25 md:auto-cols-104 md:grid-flow-col md:grid-cols-none md:grid-rows-2 md:gap-x-[2vw] md:gap-y-[min(4.5vh,2.5rem)]">
+        {toolkit.map((group, i) => (
+          <li
+            key={group.group}
+            className="card card--taped card--lift self-start md:px-5.5 md:py-4.5"
+            style={{ "--tilt": TILTS[i % TILTS.length] } as CSSProperties}
+          >
+            <span
+              className={cn(
+                "inline-block font-hand text-[1.2rem] leading-tight",
+                i % 2 ? "text-mineral" : "text-signal",
+              )}
+            >
+              {group.doodle} {group.items.length} tools
+            </span>
+            <h3 className="font-head text-[1.25rem] leading-tight font-bold">{group.group}</h3>
+            <p className="font-hand text-[1.1rem] leading-tight text-ink-soft">{group.note}</p>
+            <ul className="mt-2.5 flex flex-wrap gap-1.5">
+              {group.items.map((item) => (
+                <li
+                  key={item}
+                  className={cn("chip", group.featured?.includes(item) && "chip--featured")}
+                >
+                  {item}
+                </li>
               ))}
             </ul>
-          </div>
-        ))}
-      </div>
-
-      <ol className="grid gap-6 md:h-full md:w-[34vw] md:content-between md:gap-0">
-        {principles.map((p, i) => (
-          <li key={p.title} className="grid grid-cols-[2.5rem_1fr] border-t border-ink/20 pt-4">
-            <span className="eyebrow pt-1 text-signal">{String(i + 1).padStart(2, "0")}</span>
-            <div>
-              <h3 className="text-xl font-semibold tracking-[-0.02em]">{p.title}</h3>
-              <p className="mt-1.5 text-[0.9375rem] leading-relaxed text-ink/65">{p.body}</p>
-            </div>
           </li>
         ))}
-      </ol>
+      </ul>
     </section>
   );
 }
