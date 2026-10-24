@@ -15,9 +15,10 @@ export function Hero() {
 
       <div className="relative max-w-3xl md:max-w-[min(50vw,46rem)] lg:max-w-[min(48vw,46rem)]">
         <p className="eyebrow mb-3 text-mineral" data-intro-fade>
-          fig. 01 — {profile.name}, {profile.role.toLowerCase()}
+          fig. 01 — {profile.name}
+          <span className="hidden sm:inline">, {profile.role.toLowerCase()}</span>
         </p>
-        <h1 className="display mb-7 text-[clamp(3.4rem,13vw,5rem)] md:text-[min(6vw,10vh)] short:mb-4">
+        <h1 className="display mb-7 text-[clamp(2.5rem,10.5vw,5rem)] md:text-[min(6vw,10vh)] short:mb-4">
           <span className="block" data-intro-split>
             Complex systems,
           </span>
