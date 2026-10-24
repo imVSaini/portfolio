@@ -10,7 +10,7 @@ export function Toolkit() {
     <section
       id="skills"
       data-section="skills"
-      className="relative flex min-h-svh flex-col gap-14 px-[6vw] py-24 md:h-svh md:w-max md:flex-row md:items-start md:gap-[4vw] md:px-[5vw] md:pt-(--top-line) md:pb-0"
+      className="relative flex flex-col gap-(--block-gap) px-[6vw] py-(--section-y) md:h-svh md:w-max md:flex-row md:items-start md:gap-[4vw] md:px-[5vw] md:pt-(--top-line) md:pb-0"
     >
       <div className="md:w-[min(34vw,36rem)]" data-lit>
         <p className="eyebrow mb-3 text-mineral">fig. 05 — what’s in the pencil case</p>

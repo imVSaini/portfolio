@@ -24,7 +24,7 @@ export function About() {
     <section
       id="about"
       data-section="about"
-      className="relative flex min-h-svh flex-col gap-20 px-[6vw] py-24 md:h-svh md:w-max md:flex-row md:items-start md:gap-[6vw] md:px-[5vw] md:pt-(--top-line) md:pb-[20vh]"
+      className="relative flex flex-col gap-(--block-gap) px-[6vw] py-(--section-y) md:h-svh md:w-max md:flex-row md:items-start md:gap-[6vw] md:px-[5vw] md:pt-(--top-line) md:pb-[20vh]"
     >
       {/* fig. 02 — the statement */}
       <div className="md:w-[34vw]" data-lit>

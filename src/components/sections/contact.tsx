@@ -12,7 +12,7 @@ export function Contact() {
     <section
       id="contact"
       data-section="contact"
-      className="relative flex min-h-svh flex-col gap-14 px-[6vw] py-24 md:h-svh md:w-screen md:flex-row md:items-start md:justify-between md:gap-[5vw] md:px-[7vw] md:pt-(--top-line) md:pb-0"
+      className="relative flex flex-col gap-(--block-gap) px-[6vw] py-(--section-y) md:h-svh md:w-screen md:flex-row md:items-start md:justify-between md:gap-[5vw] md:px-[7vw] md:pt-(--top-line) md:pb-0"
     >
       {/* Left — the ask. */}
       <div className="relative md:w-[38vw]" data-lit>

@@ -9,7 +9,7 @@ export function Hero() {
     <section
       id="index"
       data-section="index"
-      className="relative flex min-h-svh flex-col justify-center overflow-hidden px-[6vw] pt-28 pb-16 md:h-svh md:w-screen md:justify-start md:overflow-visible md:px-[7vw] md:pt-(--top-line) md:pb-0"
+      className="relative flex flex-col overflow-hidden px-[6vw] pt-28 pb-(--section-y) md:h-svh md:w-screen md:overflow-visible md:px-[7vw] md:pt-(--top-line) md:pb-0"
     >
       {/* What I build, drawn out: right half on desktop, between the text and the ruler. */}
       <SystemSketch className="absolute top-[calc(var(--top-line)-1rem)] right-[5vw] bottom-[calc(var(--ruler-h)+3rem)] left-[56%] hidden md:xl:flex min-[100rem]:left-[52%]" />
@@ -64,7 +64,7 @@ export function Hero() {
       </div>
 
       {/* Touch tablets get the stacked layout; the diagram follows the text instead of floating. */}
-      <SystemSketch className="mt-14 hidden w-full max-w-3xl sm:flex md:hidden" />
+      <SystemSketch className="mt-12 hidden w-full max-w-3xl sm:flex md:hidden" />
 
       <p
         className="absolute bottom-[calc(var(--ruler-h)+0.75rem)] left-[7vw] hidden items-center gap-2 font-hand text-xl text-plum md:flex"

@@ -15,7 +15,7 @@ export function Work() {
       className="relative md:flex md:h-svh md:w-max md:items-start"
     >
       <header
-        className="relative px-[6vw] pt-24 pb-12 md:w-[34vw] md:pt-(--top-line) md:pr-[3vw] md:pb-0 md:pl-[5vw]"
+        className="relative px-[6vw] pt-(--section-y) pb-10 md:w-[34vw] md:pt-(--top-line) md:pr-[3vw] md:pb-0 md:pl-[5vw]"
         data-lit
       >
         <p className="eyebrow mb-3 text-mineral">fig. 07 — selected work</p>
@@ -27,7 +27,7 @@ export function Work() {
         </p>
       </header>
 
-      <ol className="flex flex-col gap-16 px-[6vw] pb-20 md:h-full md:flex-row md:items-start md:gap-[3.5vw] md:px-0 md:pt-[calc(var(--top-line)+13px)] md:pr-[6vw] md:pb-0">
+      <ol className="flex flex-col gap-12 px-[6vw] pb-(--section-y) md:h-full md:flex-row md:items-start md:gap-[3.5vw] md:px-0 md:pt-[calc(var(--top-line)+13px)] md:pr-[6vw] md:pb-0">
         {projects.map((project, i) => (
           <ProjectCard key={project.slug} project={project} index={i} total={projects.length} />
         ))}
