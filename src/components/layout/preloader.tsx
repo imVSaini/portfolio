@@ -64,10 +64,10 @@ export function Preloader() {
     <div
       ref={root}
       aria-hidden="true"
-      className="fixed inset-0 z-70 flex flex-col justify-between bg-ink p-[4vw] text-paper in-data-[theme=dark]:bg-paper in-data-[theme=dark]:text-ink"
+      className="fixed inset-0 z-70 flex flex-col justify-between bg-ink px-[max(1.25rem,4vw,env(safe-area-inset-left),env(safe-area-inset-right))] pt-[max(1.25rem,4vw,env(safe-area-inset-top))] pb-[max(1.25rem,4vw,env(safe-area-inset-bottom))] text-paper in-data-[theme=dark]:bg-paper in-data-[theme=dark]:text-ink"
     >
       <div data-loader-inner className="flex h-full flex-col justify-between">
-        <div className="eyebrow flex justify-between opacity-60">
+        <div className="eyebrow flex flex-col gap-0.5 opacity-60 sm:flex-row sm:justify-between sm:gap-6">
           <span>Vaibhav Kumar Saini</span>
           <span>Portfolio — Bengaluru, India</span>
         </div>
@@ -77,11 +77,14 @@ export function Preloader() {
             style={{ transform: "scaleX(0)" }}
             data-loader-bar
           />
-          <div className="flex items-end justify-between">
-            <span ref={count} className="display text-[22vw] tabular-nums md:text-[14vw]">
+          <div className="flex items-end justify-between gap-4">
+            <span
+              ref={count}
+              className="display text-[min(22vw,38vh)] tabular-nums md:text-[min(14vw,38vh)]"
+            >
               000
             </span>
-            <span className="eyebrow mb-[1.2vw] opacity-60">Warming caches</span>
+            <span className="eyebrow mb-[1.2vw] shrink-0 opacity-60">Warming caches</span>
           </div>
         </div>
       </div>

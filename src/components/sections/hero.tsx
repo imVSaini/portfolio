@@ -1,5 +1,4 @@
 import { profile } from "@/data/profile";
-import { LocalTime } from "@/components/ui/local-time";
 import { ScrollLink } from "@/components/ui/scroll-link";
 import { SystemSketch } from "@/components/ui/system-sketch";
 import { Rough } from "@/components/ui/rough";
@@ -50,17 +49,6 @@ export function Hero() {
             </li>
           ))}
         </ul>
-        <p
-          className="eyebrow mt-3 flex flex-wrap items-center gap-x-2 text-ink-soft short:hidden"
-          data-intro-fade
-        >
-          <span>{profile.location} ·</span>
-          <LocalTime timeZone={profile.timezone} label={profile.timezoneLabel} />
-          <span className="flex items-center gap-1.5">
-            · <span className="size-2 rounded-full bg-mineral" aria-hidden />{" "}
-            {profile.availability.toLowerCase()}
-          </span>
-        </p>
       </div>
 
       {/* Touch tablets get the stacked layout; the diagram follows the text instead of floating. */}

@@ -85,8 +85,6 @@
     --top-line: calc(var(--header-h) + var(--top-gap));
     /* Height of the career ruler pinned to the bottom (desktop). */
     --ruler-h: 104px;
-    /* Stacked layout rhythm, fluid from phone to tablet: each section's top/bottom padding
-       (so ~96px between sections on phones, ~144px on tablets) and the gap between blocks. */
     --section-y: clamp(3rem, 2rem + 4vw, 4.5rem);
     --block-gap: clamp(3rem, 2.25rem + 3vw, 4rem);
   }
