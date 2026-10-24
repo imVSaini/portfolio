@@ -13,7 +13,7 @@ export const experience: Role[] = [
   {
     company: "Screen Interactiv",
     title: "Lead Software Engineer",
-    location: "Bengaluru",
+    location: "Bengaluru, India",
     start: "Jan 2022",
     end: "Present",
     summary:
@@ -32,7 +32,7 @@ export const experience: Role[] = [
   {
     company: "Assent Global",
     title: "Software Engineer",
-    location: "Bengaluru",
+    location: "Bengaluru, India",
     start: "Jan 2020",
     end: "Jan 2022",
     summary:
@@ -49,7 +49,7 @@ export const experience: Role[] = [
   {
     company: "Cetpa Infotech",
     title: "Frontend Developer",
-    location: "Noida",
+    location: "Noida, India",
     start: "Jul 2019",
     end: "Dec 2019",
     summary:

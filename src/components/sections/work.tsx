@@ -1,8 +1,8 @@
 import type { CSSProperties } from "react";
 import Image from "next/image";
 import { projects, type Project } from "@/data/projects";
-import { Birds, Cloud } from "@/components/ui/sketches";
 import { cn } from "@/lib/cn";
+import { Rough } from "@/components/ui/rough";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 const TILTS = ["-0.9deg", "0.7deg", "-0.5deg", "1deg"];
@@ -18,14 +18,12 @@ export function Work() {
         className="relative px-[6vw] pt-24 pb-12 md:w-[34vw] md:pt-(--top-line) md:pr-[3vw] md:pb-0 md:pl-[5vw]"
         data-lit
       >
-        <Cloud className="absolute top-[calc(100%+10vh)] left-[46%] hidden w-32 md:block" />
-        <Birds className="absolute top-[calc(100%+4vh)] left-[16%] hidden w-20 md:block" />
         <p className="eyebrow mb-3 text-mineral">fig. 07 — selected work</p>
         <h2 className="title">
           {projects.length} favourites, <span className="hl">one sketchbook.</span>
         </h2>
         <p className="mt-4 font-hand text-2xl leading-snug text-plum">
-          every page links to its case study ↗
+          every card opens the live site ↗
         </p>
       </header>
 
@@ -55,27 +53,34 @@ function ProjectCard({
       )}
       style={{ "--tilt": TILTS[index % TILTS.length] } as CSSProperties}
     >
+      <Rough preset="card" seed={`project-${project.slug}`} />
       <a
         href={project.href}
         target="_blank"
         rel="noreferrer"
-        className="relative block aspect-16/10 overflow-hidden rounded-[3px] border-2 border-ink bg-paper-dim md:aspect-auto md:h-[31vh] short:h-[27vh]"
-        aria-label={`${project.title} — case study (opens in a new tab)`}
+        className="relative isolate block aspect-16/10 bg-paper-dim md:aspect-auto md:h-[31vh] short:h-[27vh]"
+        aria-label={`${project.title} — live site (opens in a new tab)`}
       >
-        <span data-scroll className="frame-reveal absolute inset-0 block">
-          <span
-            data-scroll
-            data-scroll-speed="0.05"
-            className="absolute inset-y-0 left-[-10%] block w-[120%]"
-          >
-            <Image
-              src={project.image}
-              alt=""
-              fill
-              sizes="(min-width: 768px) 40vw, 92vw"
-              quality={85}
-              className="object-cover object-top transition-transform duration-[1.4s] ease-out-expo group-hover:scale-[1.04]"
-            />
+        {/* Pencil frame drawn over the screenshot. */}
+        <span className="pointer-events-none absolute inset-0 z-10">
+          <Rough preset="frame" seed={`frame-${project.slug}`} className="z-0" />
+        </span>
+        <span className="absolute inset-0 block overflow-hidden">
+          <span data-scroll className="frame-reveal absolute inset-0 block">
+            <span
+              data-scroll
+              data-scroll-speed="0.05"
+              className="absolute inset-y-0 left-[-10%] block w-[120%]"
+            >
+              <Image
+                src={project.image}
+                alt=""
+                fill
+                sizes="(min-width: 768px) 40vw, 92vw"
+                quality={85}
+                className="object-cover object-top transition-transform duration-[1.4s] ease-out-expo group-hover:scale-[1.04]"
+              />
+            </span>
           </span>
         </span>
       </a>
@@ -83,7 +88,7 @@ function ProjectCard({
       <div className="px-1.5 pt-4">
         <p className="eyebrow flex justify-between text-mineral">
           <span>
-            fig. 07.{pad(index + 1)} — {project.category.toLowerCase()}, {project.year}
+            fig. 07.{pad(index + 1)} — {project.category.toLowerCase()}
           </span>
           <span className="text-ink-soft">
             {pad(index + 1)} / {pad(total)}
@@ -101,7 +106,8 @@ function ProjectCard({
         </p>
         <div className="mt-3 flex items-end justify-between">
           <a href={project.href} target="_blank" rel="noreferrer" className="btn btn--small">
-            Case study ↗
+            <Rough preset="button" seed={`cta-${project.slug}`} />
+            Visit live ↗
           </a>
           <span className="font-hand text-lg text-ink-soft">drawn with love</span>
         </div>

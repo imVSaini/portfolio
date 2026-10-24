@@ -69,7 +69,7 @@ export function Preloader() {
       <div data-loader-inner className="flex h-full flex-col justify-between">
         <div className="eyebrow flex justify-between opacity-60">
           <span>Vaibhav Kumar Saini</span>
-          <span>Portfolio — Bengaluru</span>
+          <span>Portfolio — Bengaluru, India</span>
         </div>
         <div>
           <div

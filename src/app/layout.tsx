@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Caveat, DM_Sans, Kalam } from "next/font/google";
 import { Header } from "@/components/layout/header";
-import { Landscape } from "@/components/layout/landscape";
+import { CareerRuler } from "@/components/layout/career-ruler";
 import { Preloader } from "@/components/layout/preloader";
 import { profile } from "@/data/profile";
 import { themeBootScript } from "@/store/use-theme-store";
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   authors: [{ name: profile.name }],
   keywords: [
     "Full-stack engineer",
-    "Lead software engineer",
+    "Full stack developer",
     "Next.js",
     "React",
     "FastAPI",
@@ -61,7 +61,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           Skip to content
         </a>
         <Preloader />
-        <Landscape />
+        <CareerRuler />
         <Header />
         {children}
       </body>

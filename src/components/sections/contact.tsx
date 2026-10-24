@@ -2,9 +2,10 @@ import type { CSSProperties } from "react";
 import { profile } from "@/data/profile";
 import { BackToStart } from "@/components/ui/back-to-start";
 import { LocalTime } from "@/components/ui/local-time";
-import { Birds, Cloud } from "@/components/ui/sketches";
+import { Rough } from "@/components/ui/rough";
 
 const linkedIn = profile.socials.find((s) => s.label === "LinkedIn");
+const gitHub = profile.socials.find((s) => s.label === "GitHub");
 
 export function Contact() {
   return (
@@ -15,7 +16,6 @@ export function Contact() {
     >
       {/* Left — the ask. */}
       <div className="relative md:w-[38vw]" data-lit>
-        <Birds className="absolute top-[-2vh] right-[6%] hidden w-20 md:block" />
         <p className="eyebrow mb-3 text-mineral">fig. 08 — get in touch</p>
         <h2 className="title mb-5 short:mb-3">
           Got a system that has to <span className="hl">hold?</span>
@@ -28,11 +28,19 @@ export function Contact() {
 
         <div className="mt-8 flex flex-wrap gap-3.5 short:mt-6">
           <a href={`mailto:${profile.email}`} className="btn">
+            <Rough preset="button" seed="contact-email" />
             Email me ↗
           </a>
           {linkedIn && (
             <a href={linkedIn.href} target="_blank" rel="noreferrer" className="btn btn--ghost">
+              <Rough preset="button" seed="contact-linkedin" />
               LinkedIn ↗
+            </a>
+          )}
+          {gitHub && (
+            <a href={gitHub.href} target="_blank" rel="noreferrer" className="btn btn--ghost">
+              <Rough preset="button" seed="contact-github" />
+              GitHub ↗
             </a>
           )}
         </div>
@@ -45,7 +53,6 @@ export function Contact() {
 
       {/* Right — a postcard, already addressed. */}
       <div className="relative md:mt-3.25 md:w-[min(44vw,40rem)]">
-        <Cloud className="absolute top-[-3vh] left-[-14%] hidden w-28 min-[100rem]:block" />
         <Postcard />
         <p className="mt-5 text-right font-hand text-xl text-plum md:pr-6">
           postage’s on me — just hit send ↗
@@ -64,9 +71,10 @@ function Postcard() {
       className="card card--taped card--lift group block p-0"
       style={{ "--tilt": "0.6deg" } as CSSProperties}
     >
+      <Rough preset="card" seed="postcard" />
       <div className="grid min-h-[min(46vh,22rem)] grid-cols-1 sm:grid-cols-[1fr_1.05fr]">
         {/* Message side — left blank for the sender. */}
-        <div className="flex flex-col justify-between gap-6 p-6 sm:border-r-2 sm:border-dashed sm:border-ink/30 md:p-7">
+        <div className="flex flex-col justify-between gap-6 p-6 sm:border-r-[1.5px] sm:border-dashed sm:border-ink/35 md:p-7">
           <p className="font-hand text-[1.9rem] leading-none">Hi Vaibhav,</p>
           <div className="space-y-6 short:space-y-5" aria-hidden>
             {[0, 1, 2].map((i) => (

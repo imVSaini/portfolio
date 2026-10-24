@@ -134,14 +134,6 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
                 }),
             });
           });
-
-          // The hero atom spins with the whole journey.
-          gsap.to("[data-rotor]", {
-            rotation: 300,
-            svgOrigin: "0 0",
-            ease: "none",
-            scrollTrigger: { start: 0, end: "max", scrub: 0.8 },
-          });
         }
 
         // --- Highlighter swipes + stat rings --------------------------------------------------

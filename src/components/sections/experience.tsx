@@ -1,17 +1,28 @@
 import type { CSSProperties } from "react";
 import { experience } from "@/data/experience";
 import { ScrollLink } from "@/components/ui/scroll-link";
-import { Cloud } from "@/components/ui/sketches";
+import { JourneyPencil } from "@/components/ui/journey-pencil";
+import { Rough } from "@/components/ui/rough";
 
 const TILTS = ["-0.6deg", "0.5deg", "-0.4deg", "0.6deg"];
 
 function StepNo({ n }: { n: number }) {
   return (
-    <span className="absolute -top-7 left-6 grid size-14 place-items-center rounded-blob border-2 border-ink bg-oat font-hand text-[1.8rem] font-bold">
+    <span className="absolute -top-7 left-6 isolate grid size-14 place-items-center font-hand text-[1.8rem] font-bold">
+      <span className="absolute inset-0.5 -z-20 rounded-full bg-oat" aria-hidden />
+      <Rough preset="circle" seed={`step-${n}`} />
       {String(n).padStart(2, "0")}
     </span>
   );
 }
+
+// Margin years in card order (newest first), then the open slot that card 04 asks about.
+const MARKS = [
+  { at: 0, label: "2022" },
+  { at: 1 / 3, label: "2020" },
+  { at: 2 / 3, label: "2019" },
+  { at: 1, label: "next", tone: "next" as const },
+];
 
 /**
  * The "fake-vertical" panel. On desktop the outer wrapper is what the horizontal scroll sees;
@@ -24,8 +35,7 @@ export function Experience() {
         data-fake-vertical
         className="relative md:flex md:h-svh md:w-screen md:overflow-hidden"
       >
-        <aside className="relative flex flex-col justify-between gap-10 px-[6vw] pt-24 pb-6 md:w-[38vw] md:pt-(--top-line) md:pr-[3vw] md:pb-[29vh] md:pl-[5vw]">
-          <Cloud className="absolute top-[calc(var(--header-h)+2vh)] right-[8%] hidden w-24 md:block" />
+        <aside className="relative flex flex-col justify-start gap-10 px-[6vw] pt-24 pb-6 md:w-[38vw] md:pt-(--top-line) md:pr-[3vw] md:pb-[29vh] md:pl-[5vw]">
           <div data-lit>
             <p className="eyebrow mb-3 text-mineral">fig. 06 — the journey</p>
             <h2 className="title">
@@ -33,26 +43,14 @@ export function Experience() {
             </h2>
           </div>
 
-          <div className="flex items-end gap-5">
-            <p className="font-hand text-[clamp(3.5rem,min(6vw,9vh),5.5rem)] leading-[0.9] font-bold text-signal">
-              2019 —<br />
-              <span className="text-ink">now</span>
-            </p>
-            <span
-              className="relative mb-2 hidden h-[14vh] w-0.75 rounded bg-ink/15 md:block"
-              aria-hidden
-            >
-              <span
-                data-fake-vertical-meter
-                className="absolute inset-0 origin-top rounded bg-signal"
-                style={{ transform: "scaleY(0)" }}
-              />
-            </span>
-          </div>
+          <JourneyPencil
+            marks={MARKS}
+            className="hidden h-[min(28vh,15rem)] md:block short:h-[24vh]"
+          />
         </aside>
 
-        {/* Fades the column out under the header while it travels. */}
-        <div className="px-[6vw] md:w-[62vw] md:mask-[linear-gradient(to_bottom,transparent_5rem,black_10rem,black_calc(100%-6rem),transparent_calc(100%-3rem))] md:pr-[6vw] md:pl-[1vw]">
+        {/* Fades the column out under the header and above the career ruler while it travels. */}
+        <div className="px-[6vw] md:w-[62vw] md:mask-[linear-gradient(to_bottom,transparent_5rem,black_10rem,black_calc(100%-var(--ruler-h)-4rem),transparent_calc(100%-var(--ruler-h)-0.5rem))] md:pr-[6vw] md:pl-[1vw]">
           <ol
             data-fake-vertical-track
             className="space-y-16 pt-10 pb-16 md:pt-[calc(var(--top-line)+1.75rem)] md:pb-[24vh]"
@@ -63,6 +61,7 @@ export function Experience() {
                 className="card pt-12"
                 style={{ "--tilt": TILTS[i % TILTS.length] } as CSSProperties}
               >
+                <Rough preset="card" seed={`job-${role.company}`} />
                 <StepNo n={i + 1} />
                 <p className="font-hand text-[1.4rem] leading-none text-signal">
                   {role.start} — {role.end}
@@ -88,6 +87,7 @@ export function Experience() {
             ))}
 
             <li className="card pt-12" style={{ "--tilt": "0.8deg" } as CSSProperties}>
+              <Rough preset="card" seed="job-next" />
               <StepNo n={experience.length + 1} />
               <p className="font-hand text-[1.4rem] leading-none text-signal">Next</p>
               <h3 className="mt-1.5 font-head text-[1.6rem] leading-tight font-bold">
@@ -97,6 +97,7 @@ export function Experience() {
                 The next chapter is still a blank page. Bring the problem — I’ll bring the pencil.
               </p>
               <ScrollLink to="contact" className="btn btn--small">
+                <Rough preset="button" seed="job-next-cta" />
                 Start a sketch →
               </ScrollLink>
             </li>

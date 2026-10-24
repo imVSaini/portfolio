@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import { profile } from "@/data/profile";
-import { Bulb, Ring } from "@/components/ui/sketches";
+import { Ring } from "@/components/ui/sketches";
+import { Rough } from "@/components/ui/rough";
 
 const TILTS = ["-1deg", "0.8deg", "0.6deg", "-0.9deg"];
 const DRIFT = [0.03, -0.02, 0.04, -0.03];
@@ -38,7 +39,6 @@ export function About() {
 
       {/* fig. 03 — the footprint */}
       <div className="relative md:w-[32vw]" data-lit>
-        <Bulb className="absolute top-[-22vh] right-0 hidden w-28 md:block" lit />
         <p className="eyebrow mb-3 text-mineral">fig. 03 — the footprint</p>
         <h2 className="title mb-10 short:mb-6">
           My footprint, <span className="hl">measured in shipped code</span>
@@ -70,6 +70,7 @@ export function About() {
               className="card card--taped"
               style={{ "--tilt": TILTS[i] } as CSSProperties}
             >
+              <Rough preset="card" seed={`pillar-${p.title}`} />
               <h3 className="mb-1.5 font-head text-xl leading-tight font-bold">{p.title}</h3>
               <p className="text-[0.95rem] text-ink-soft">{p.text}</p>
             </li>
@@ -85,9 +86,12 @@ export function About() {
         <p className="text-ink-soft" data-reveal>
           {profile.howIWork.story}
         </p>
-        <ul className="ticks mt-5">
-          {profile.howIWork.ticks.map((tick) => (
-            <li key={tick}>{tick}</li>
+        {/* data-lit: items rise in one by one and each tick draws itself when scrolled into view. */}
+        <ul className="ticks mt-5" data-lit>
+          {profile.howIWork.ticks.map((tick, i) => (
+            <li key={tick} style={{ "--i": i } as CSSProperties}>
+              {tick}
+            </li>
           ))}
         </ul>
       </div>

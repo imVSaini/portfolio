@@ -4,7 +4,9 @@ import { useEffect, useRef } from "react";
 import { profile, sections, type SectionId } from "@/data/profile";
 import { useScrollStore } from "@/store/use-scroll-store";
 import { cn } from "@/lib/cn";
+import { LogoMark } from "@/components/ui/logo";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { Rough } from "@/components/ui/rough";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
@@ -60,15 +62,17 @@ export function Header() {
               e.preventDefault();
               go("index");
             }}
-            className="flex items-center gap-2"
+            className="group flex items-center gap-3"
             aria-label={`${profile.name} — back to start`}
           >
-            <span className="grid size-11 place-items-center rounded-blob border-2 border-ink bg-signal font-hand text-3xl leading-none font-bold text-paper">
-              {profile.firstName[0]}
-            </span>
-            <span className="font-head text-[1.4rem] font-bold tracking-wide max-[22rem]:hidden">
-              {profile.firstName.toLowerCase()}
-              <span className="text-signal">.saini</span>
+            <LogoMark className="size-10.5 shrink-0" />
+            <span className="flex flex-col leading-none max-[22rem]:hidden">
+              <span className="font-head text-[1.2rem] font-bold tracking-tight">
+                {profile.name.replace(" Kumar", "")}
+              </span>
+              <span className="mt-0.5 font-hand text-[1.05rem] text-ink-soft">
+                {profile.role.toLowerCase()}
+              </span>
             </span>
           </a>
 
@@ -82,8 +86,9 @@ export function Header() {
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
             aria-label={menuOpen ? "Close menu" : "Open menu"}
-            className="relative z-10 flex size-11.5 flex-col justify-between rounded-sketchy border-2 border-ink bg-card p-2.5 md:hidden"
+            className="relative isolate z-10 flex size-11.5 flex-col justify-between p-2.5 md:hidden"
           >
+            <Rough preset="card" seed="menu-button" pad={1} />
             <span
               className={cn(
                 "block h-0.5 rounded bg-ink transition-transform duration-300",
@@ -105,13 +110,16 @@ export function Header() {
           </button>
         </div>
 
-        {/* Scroll progress, drawn like a pencil line under the bar. */}
-        <div className="absolute inset-x-0 bottom-0 h-0.75">
+        {/* A wobbly pencil rule under the bar; the ink stroke over it is the scroll progress. */}
+        <div className="absolute inset-x-0 -bottom-1 h-2.5">
+          <PencilRule className="text-ink/25" />
           <span
             ref={progress}
-            className="block h-full origin-left rounded-r bg-ink"
+            className="absolute inset-0 block origin-left"
             style={{ transform: "scaleX(0)" }}
-          />
+          >
+            <PencilRule className="text-ink" strong />
+          </span>
         </div>
       </header>
 
@@ -226,5 +234,35 @@ function MobileMenu({
         </a>
       </p>
     </div>
+  );
+}
+
+// A long, slightly irregular wave (deterministic) so the rule reads as drawn by hand.
+const RULE = (() => {
+  let d = "M0 5";
+  for (let x = 0; x < 1000; x += 40) {
+    const lift = 3.2 + Math.sin(x * 0.37) * 1.4;
+    d += ` q 20 ${(-lift).toFixed(2)} 40 0`;
+  }
+  return d;
+})();
+
+function PencilRule({ className, strong = false }: { className?: string; strong?: boolean }) {
+  return (
+    <svg
+      viewBox="0 0 1000 10"
+      preserveAspectRatio="none"
+      className={cn("absolute inset-0 h-full w-full overflow-visible", className)}
+      aria-hidden
+    >
+      <path
+        d={RULE}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={strong ? 2.2 : 1.4}
+        strokeLinecap="round"
+        vectorEffect="non-scaling-stroke"
+      />
+    </svg>
   );
 }

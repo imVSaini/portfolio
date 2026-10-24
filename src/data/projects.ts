@@ -3,7 +3,6 @@ export type Project = {
   title: string;
   client: string;
   category: string;
-  year: string;
   description: string;
   stack: string[];
   image: string;
@@ -16,82 +15,75 @@ export const projects: Project[] = [
     title: "Work OS",
     client: "Own product",
     category: "SaaS",
-    year: "2025",
     description:
       "Workspace SaaS that puts tasks, time, clients, docs and finance in one grid, with a separate workspace for every context. Installable as a PWA.",
     stack: ["Next.js 15", "React 19", "FastAPI", "Zustand", "PostgreSQL 16", "Redis 7", "PWA"],
     image: "/projects/workos.jpg",
-    href: "https://dsgnphy.com/projects/workos/",
+    href: "https://workos.dsgnphy.com/",
   },
   {
     slug: "vlsid-2027",
     title: "VLSID 2027",
     client: "40th International VLSI Design Conference",
     category: "Conference",
-    year: "2027",
     description:
       "Official platform for the 40th International Conference on VLSI Design, at the Sheraton Grand, Bengaluru.",
     stack: ["WordPress", "Custom theme", "PHP"],
     image: "/projects/vlsid-2027.jpg",
-    href: "https://dsgnphy.com/projects/vlsid-2027/",
+    href: "https://vlsid.org/",
   },
   {
     slug: "travel-kampany",
     title: "Travel Kampany",
     client: "Travel Kampany",
     category: "Travel & Tourism",
-    year: "2025",
     description:
       "Travel platform with an itinerary builder and a showcase page for every destination.",
     stack: ["PHP", "Node.js", "Tailwind CSS"],
     image: "/projects/travel-kampany.jpg",
-    href: "https://dsgnphy.com/projects/travel-kampany/",
+    href: "https://travelkampany.in/",
   },
   {
-    slug: "excel-precast",
-    title: "Excel Precast",
-    client: "Excel Precast",
-    category: "Manufacturing",
-    year: "2025",
+    slug: "kvpr",
+    title: "KVPR Masalas",
+    client: "KVPR",
+    category: "E-commerce",
     description:
-      "Product-led website for a precast concrete manufacturer: products, delivered projects and plant capabilities.",
-    stack: ["WordPress", "Custom theme", "PHP"],
-    image: "/projects/excel-precast.jpg",
-    href: "https://dsgnphy.com/projects/excel-precast/",
+      "Online store for a premium Indian spice brand: product catalogue, cart and checkout, dealership enquiries and a recipes section.",
+    stack: ["WordPress", "WooCommerce", "Custom theme", "PHP"],
+    image: "/projects/kvpr.jpg",
+    href: "https://kvprfs.com/",
   },
   {
     slug: "vlsid-2026",
     title: "VLSID 2026",
     client: "39th International VLSI Design Conference",
     category: "Conference",
-    year: "2026",
     description:
       "Dual-venue conference site for the 39th edition in Pune, January 2026, built and run end to end.",
     stack: ["WordPress", "Custom theme", "PHP"],
     image: "/projects/vlsid-2026.jpg",
-    href: "https://dsgnphy.com/projects/vlsid-2026/",
+    href: "https://2026.vlsid.org/",
   },
   {
     slug: "basics-co",
     title: "Basics Architect",
     client: "Basics Co.",
     category: "Architecture",
-    year: "2025",
     description:
       "Sleek portfolio site for an architecture studio, built around its projects and client testimonials.",
     stack: ["WordPress", "Custom theme", "Vite"],
     image: "/projects/basics-co.jpg",
-    href: "https://dsgnphy.com/projects/basics-co/",
+    href: "https://basics.co.in/",
   },
   {
     slug: "3dvisual",
     title: "3D Visual Solutions",
     client: "3D Visual Solutions",
     category: "3D Visualisation",
-    year: "2025",
     description: "Showcase for photo-real architectural renders, walkthroughs and drone mapping.",
     stack: ["WordPress", "Custom theme", "PHP"],
     image: "/projects/3dvisual.jpg",
-    href: "https://dsgnphy.com/projects/3dvisual/",
+    href: "https://3dvisual.in/",
   },
 ];

@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import { toolkit } from "@/data/toolkit";
 import { cn } from "@/lib/cn";
+import { Rough } from "@/components/ui/rough";
 
 const TILTS = ["-0.8deg", "0.7deg", "0.5deg", "-0.6deg", "-0.4deg", "0.9deg", "0.6deg", "-0.7deg"];
 
@@ -18,7 +19,7 @@ export function Toolkit() {
         </h2>
         <p className="text-[1.05rem] leading-relaxed text-ink-soft" data-reveal>
           From Python services and Node APIs to React interfaces, cloud infrastructure and
-          LLM‑powered features — the full stack, end to end.
+          LLM-powered features — the full stack, end to end.
         </p>
       </div>
 
@@ -30,6 +31,7 @@ export function Toolkit() {
             className="card card--taped card--lift self-start md:px-5.5 md:py-4.5"
             style={{ "--tilt": TILTS[i % TILTS.length] } as CSSProperties}
           >
+            <Rough preset="card" seed={`skills-${group.group}`} />
             <span
               className={cn(
                 "inline-block font-hand text-[1.2rem] leading-tight",
@@ -46,6 +48,11 @@ export function Toolkit() {
                   key={item}
                   className={cn("chip", group.featured?.includes(item) && "chip--featured")}
                 >
+                  <Rough
+                    preset={group.featured?.includes(item) ? "chip-featured" : "chip"}
+                    seed={`chip-${item}`}
+                    pad={1}
+                  />
                   {item}
                 </li>
               ))}
