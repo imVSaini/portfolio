@@ -73,7 +73,7 @@ export function ThemeToggle({ className }: { className?: string }) {
       title={`${dark ? "Dark" : "Light"} theme${mode === "system" ? " (system)" : ""}`}
       onClick={() => setTheme(next)}
       className={cn(
-        "group relative inline-flex h-7 w-13.5 shrink-0 items-center rounded-full border-[1.5px] border-ink/25 bg-paper-dim/70 px-0.5 transition-colors duration-300 hover:border-ink/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal focus-visible:outline-solid",
+        "group tap-area relative inline-flex h-7 w-13.5 shrink-0 items-center rounded-full border-[1.5px] border-ink/25 bg-paper-dim/70 px-0.5 transition-colors duration-300 hover:border-ink/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal focus-visible:outline-solid",
         className,
       )}
     >

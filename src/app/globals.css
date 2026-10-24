@@ -67,7 +67,12 @@
 }
 
 /* Short desktop windows (≤ 800px tall) — tighter vertical rhythm. */
-@custom-variant short (@media (width >= 48rem) and (height <= 880px));
+/* The sideways "strip" layout is for mouse/trackpad screens only. Touch devices of any width
+   (phones, tablets, touch laptops in tablet mode) get the stacked vertical layout, where a
+   vertical swipe scrolls. `md:` everywhere means "strip layout"; keep in sync with STRIP in
+   src/components/scroll/smooth-scroll.tsx. */
+@custom-variant md (@media (width >= 48rem) and (hover: hover) and (pointer: fine));
+@custom-variant short (@media (width >= 48rem) and (hover: hover) and (pointer: fine) and (height <= 880px));
 
 @layer base {
   :root {
@@ -126,6 +131,36 @@
     line-height: 1.6;
     font-synthesis: none;
     text-rendering: optimizeLegibility;
+  }
+
+  /* Tailwind v4 preflight resets buttons to cursor: default. */
+  button:not(:disabled) {
+    cursor: pointer;
+  }
+
+  /* Stacked (touch / narrow) layout: keep content clear of notches and the home indicator.
+     The strip layout is mouse-only, where safe-area insets are always 0. */
+  @media not ((width >= 48rem) and (hover: hover) and (pointer: fine)) {
+    body {
+      padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
+      /* Room for the fixed bottom nav (4rem) above the home indicator. */
+      padding-bottom: calc(4rem + env(safe-area-inset-bottom));
+    }
+  }
+
+  /* Touch: grow small controls' hit areas to ~44px without changing how they look. */
+  @media (pointer: coarse) {
+    .tap-area {
+      position: relative;
+    }
+
+    .tap-area::after,
+    .btn::after {
+      content: "";
+      position: absolute;
+      inset: -8px -4px;
+    }
   }
 
   ::selection {
@@ -225,9 +260,11 @@
     transition: transform 0.2s;
   }
 
-  .btn:hover {
-    --btn-fill: var(--color-clay-deep);
-    transform: translate(-2px, -2px) rotate(-1deg);
+  @media (hover: hover) {
+    .btn:hover {
+      --btn-fill: var(--color-clay-deep);
+      transform: translate(-2px, -2px) rotate(-1deg);
+    }
   }
 
   .btn:active {
@@ -239,8 +276,10 @@
     color: var(--color-ink);
   }
 
-  .btn--ghost:hover {
-    --btn-fill: var(--color-paper-dim);
+  @media (hover: hover) {
+    .btn--ghost:hover {
+      --btn-fill: var(--color-paper-dim);
+    }
   }
 
   .btn--small {
@@ -273,8 +312,10 @@
     transition: translate 0.25s;
   }
 
-  .card--lift:hover {
-    translate: -3px -3px;
+  @media (hover: hover) {
+    .card--lift:hover {
+      translate: -3px -3px;
+    }
   }
 
   .note {
@@ -353,10 +394,16 @@
     transition: background-size 0.6s var(--ease-out-expo);
   }
 
-  .link-line:hover,
   .link-line:focus-visible {
     background-position: 0% 100%;
     background-size: 100% 2px;
+  }
+
+  @media (hover: hover) {
+    .link-line:hover {
+      background-position: 0% 100%;
+      background-size: 100% 2px;
+    }
   }
 
   /* Project frames wipe open when Locomotive marks them in view. */
@@ -433,14 +480,22 @@ html:not(.is-loading) .logo-draw path + path {
   transform: rotate(-4deg);
 }
 
-.group:hover .logo-tile,
 .group:focus-visible .logo-tile {
   transform: rotate(0deg) translate(-1px, -1px);
 }
 
-.group:hover .logo-shadow,
 .group:focus-visible .logo-shadow {
   transform: translate(1.5px, 1.5px);
+}
+
+@media (hover: hover) {
+  .group:hover .logo-tile {
+    transform: rotate(0deg) translate(-1px, -1px);
+  }
+
+  .group:hover .logo-shadow {
+    transform: translate(1.5px, 1.5px);
+  }
 }
 
 /* System sketch: arrows draw in, boxes settle, requests start flowing — once the preloader lifts. */

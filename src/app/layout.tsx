@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Caveat, DM_Sans, Kalam } from "next/font/google";
 import { Header } from "@/components/layout/header";
+import { BottomNav } from "@/components/layout/bottom-nav";
 import { CareerRuler } from "@/components/layout/career-ruler";
 import { Preloader } from "@/components/layout/preloader";
 import { profile } from "@/data/profile";
@@ -39,6 +40,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: "#faf9f5",
+  viewportFit: "cover",
+  interactiveWidget: "resizes-content",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -63,6 +66,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Preloader />
         <CareerRuler />
         <Header />
+        <BottomNav />
         {children}
       </body>
     </html>

@@ -15,14 +15,12 @@ type ScrollState = {
   /** Scroll offset in px along the active axis, and 1 / -1 for forward / back. */
   scroll: number;
   direction: number;
-  menuOpen: boolean;
   scrollTo: ScrollToFn;
 
   setReady: () => void;
   setOrientation: (orientation: ScrollState["orientation"]) => void;
   setActiveSection: (id: SectionId) => void;
   setScroll: (values: { progress: number; scroll: number; direction: number }) => void;
-  setMenuOpen: (open: boolean) => void;
   registerScrollTo: (fn: ScrollToFn | null) => void;
 };
 
@@ -39,13 +37,11 @@ export const useScrollStore = create<ScrollState>()((set) => ({
   progress: 0,
   scroll: 0,
   direction: 0,
-  menuOpen: false,
   scrollTo: nativeScrollTo,
 
   setReady: () => set({ ready: true }),
   setOrientation: (orientation) => set({ orientation }),
   setActiveSection: (activeSection) => set({ activeSection }),
   setScroll: ({ progress, scroll, direction }) => set({ progress, scroll, direction }),
-  setMenuOpen: (menuOpen) => set({ menuOpen }),
   registerScrollTo: (fn) => set({ scrollTo: fn ?? nativeScrollTo }),
 }));

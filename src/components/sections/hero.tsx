@@ -12,9 +12,9 @@ export function Hero() {
       className="relative flex min-h-svh flex-col justify-center overflow-hidden px-[6vw] pt-28 pb-16 md:h-svh md:w-screen md:justify-start md:overflow-visible md:px-[7vw] md:pt-(--top-line) md:pb-0"
     >
       {/* What I build, drawn out: right half on desktop, between the text and the ruler. */}
-      <SystemSketch className="absolute top-[calc(var(--top-line)-1rem)] right-[5vw] bottom-[calc(var(--ruler-h)+3rem)] left-[56%] hidden xl:flex min-[100rem]:left-[52%]" />
+      <SystemSketch className="absolute top-[calc(var(--top-line)-1rem)] right-[5vw] bottom-[calc(var(--ruler-h)+3rem)] left-[56%] hidden md:xl:flex min-[100rem]:left-[52%]" />
 
-      <div className="relative max-w-170 md:max-w-[min(50vw,46rem)] lg:max-w-[min(48vw,46rem)]">
+      <div className="relative max-w-3xl md:max-w-[min(50vw,46rem)] lg:max-w-[min(48vw,46rem)]">
         <p className="eyebrow mb-3 text-mineral" data-intro-fade>
           fig. 01 — {profile.name}, {profile.role.toLowerCase()}
         </p>
@@ -42,6 +42,7 @@ export function Hero() {
             Get in touch
           </ScrollLink>
         </div>
+
         <ul className="flex flex-wrap gap-x-6 gap-y-2" data-intro-fade>
           {profile.chips.map((c) => (
             <li key={c.text} className="font-hand text-xl text-ink-soft">
@@ -61,6 +62,9 @@ export function Hero() {
           </span>
         </p>
       </div>
+
+      {/* Touch tablets get the stacked layout; the diagram follows the text instead of floating. */}
+      <SystemSketch className="mt-14 hidden w-full max-w-3xl sm:flex md:hidden" />
 
       <p
         className="absolute bottom-[calc(var(--ruler-h)+0.75rem)] left-[7vw] hidden items-center gap-2 font-hand text-xl text-plum md:flex"

@@ -11,8 +11,8 @@ import type { SectionId } from "@/data/profile";
 
 gsap.registerPlugin(ScrollTrigger, SplitText, useGSAP);
 
-const DESKTOP = "(min-width: 48rem)";
-const MOBILE = "(max-width: 47.99rem)";
+const DESKTOP = "(min-width: 48rem) and (hover: hover) and (pointer: fine)";
+const MOBILE = "(max-width: 47.99rem), (hover: none), (pointer: coarse)";
 const REDUCED = "(prefers-reduced-motion: reduce)";
 
 /**
