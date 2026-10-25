@@ -150,22 +150,59 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
 
         // --- Props ------------------------------------------------------------------------------
         gsap.utils.toArray<HTMLElement>("[data-prop]").forEach((el) => {
+          if (!el.getClientRects().length) return;
+          const tl = gsap.timeline({ defaults: { duration: 1, ease: "power1.inOut" } });
+
           const path = el.querySelector<SVGPathElement>("[data-prop-path]");
           const rider = el.querySelector<SVGGElement>("[data-prop-rider]");
-          const draw = el.querySelector("[data-prop-draw]");
-          if (!path || !rider || !draw || !el.getClientRects().length) return;
+          if (path && rider) {
+            const origin = (rider.dataset.propOrigin ?? "0.5 0.5").split(" ").map(Number);
+            tl.to(
+              rider,
+              {
+                motionPath: {
+                  path,
+                  align: path,
+                  alignOrigin: origin as [number, number],
+                  autoRotate: rider.hasAttribute("data-prop-turn"),
+                },
+              },
+              0,
+            );
+          }
 
-          const tl = gsap.timeline({ defaults: { duration: 1, ease: "power1.inOut" } });
-          tl.to(
-            rider,
-            { motionPath: { path, align: path, alignOrigin: [0.5, 0.5], autoRotate: true } },
-            0,
-          ).fromTo(
-            draw,
-            { attr: { "stroke-dasharray": 1, "stroke-dashoffset": 1 } },
-            { attr: { "stroke-dashoffset": 0 } },
-            0,
+          el.querySelectorAll("[data-prop-draw]").forEach((node) =>
+            tl.fromTo(
+              node,
+              { attr: { "stroke-dasharray": 1, "stroke-dashoffset": 1 } },
+              { attr: { "stroke-dashoffset": 0 } },
+              0,
+            ),
           );
+
+          el.querySelectorAll<SVGElement>("[data-prop-spin]").forEach((node) =>
+            tl.fromTo(
+              node,
+              { rotation: 0, transformOrigin: "50% 50%" },
+              { rotation: Number(node.dataset.propSpin) },
+              0,
+            ),
+          );
+
+          const steps = el.querySelectorAll("[data-prop-step]");
+          if (steps.length)
+            tl.from(
+              steps,
+              {
+                autoAlpha: 0,
+                scale: 0.3,
+                transformOrigin: "50% 50%",
+                duration: 0.15,
+                ease: "back.out(2)",
+                stagger: 0.85 / steps.length,
+              },
+              0,
+            );
 
           if (reduced) return tl.progress(1);
           ScrollTrigger.create({

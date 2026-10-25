@@ -3,6 +3,7 @@ import Image from "next/image";
 import { projects, type Project } from "@/data/projects";
 import { cn } from "@/lib/cn";
 import { Rough } from "@/components/ui/rough";
+import { Rocket } from "@/components/ui/scroll-props";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 const TILTS = ["-0.9deg", "0.7deg", "-0.5deg", "1deg"];
@@ -25,6 +26,7 @@ export function Work() {
         <p className="mt-4 font-hand text-2xl leading-snug text-plum">
           every card opens the live site ↗
         </p>
+        <Rocket className="mt-6 ml-auto w-36 md:mt-10 md:ml-0 md:w-[min(100%,20rem,36vh)]" />
       </header>
 
       <ol className="flex flex-col gap-12 px-[6vw] pb-(--section-y) md:h-full md:flex-row md:items-start md:gap-[3.5vw] md:px-0 md:pt-[calc(var(--top-line)+13px)] md:pr-[6vw] md:pb-0">

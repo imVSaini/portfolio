@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import { profile } from "@/data/profile";
 import { Ring } from "@/components/ui/sketches";
 import { Rough } from "@/components/ui/rough";
+import { Footprints } from "@/components/ui/scroll-props";
 
 const TILTS = ["-1deg", "0.8deg", "0.6deg", "-0.9deg"];
 const DRIFT = [0.03, -0.02, 0.04, -0.03];
@@ -35,6 +36,7 @@ export function About() {
         <p className="mt-6 text-[1.02rem] leading-relaxed text-ink-soft" data-reveal>
           {profile.lead}
         </p>
+        <Footprints className="mt-8 w-full max-w-104 short:mt-5 short:max-w-84" />
       </div>
 
       {/* fig. 03 — the footprint */}

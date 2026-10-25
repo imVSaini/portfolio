@@ -60,9 +60,7 @@ export function Contact() {
         </p>
       </div>
 
-      <PaperPlane
-        className="w-full max-w-md self-end md:absolute md:max-w-none md:bottom-[calc(var(--ruler-h)+1.5rem)] md:left-[7vw] md:w-[min(58vw,105vh)] short:bottom-[calc(var(--ruler-h)+0.5rem)] short:w-[min(44vw,78vh)]"
-      />
+      <PaperPlane className="w-full max-w-md self-end md:absolute md:bottom-[calc(var(--ruler-h)+1.5rem)] md:left-[7vw] md:w-[min(58vw,105vh)] md:max-w-none short:bottom-[calc(var(--ruler-h)+0.5rem)] short:w-[min(44vw,78vh)]" />
     </section>
   );
 }
