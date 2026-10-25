@@ -17,7 +17,7 @@ export function Specimen({ className }: { className?: string }) {
         data-ink-specimen
         viewBox="0 0 520 470"
         preserveAspectRatio="xMidYMid meet"
-        className="h-full w-full overflow-visible"
+        className="size-full overflow-visible"
       >
         <text x="40" y="44" className="fill-mineral font-hand text-[22px]">
           fig. 01b — specimen: one drop

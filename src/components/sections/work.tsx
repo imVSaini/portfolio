@@ -78,7 +78,7 @@ function ProjectCard({
                 fill
                 sizes="(min-width: 768px) 40vw, 92vw"
                 quality={85}
-                className="object-cover object-top transition-transform duration-[1.4s] ease-out-expo group-hover:scale-[1.04]"
+                className="object-cover object-top transition-transform duration-[1.4s] ease-out-expo group-hover:scale-104"
               />
             </span>
           </span>
@@ -101,9 +101,7 @@ function ProjectCard({
         </h3>
         <p className="font-head text-mineral">@ {project.client}</p>
         <p className="mt-2 text-[0.95rem] leading-relaxed text-ink-soft">{project.description}</p>
-        <p className="mt-2 font-hand text-[1.25rem] leading-snug text-plum">
-          {project.stack.join(" · ")}
-        </p>
+        <p className="mt-2 font-hand text-xl leading-snug text-plum">{project.stack.join(" · ")}</p>
         <div className="mt-3 flex items-end justify-between">
           <a href={project.href} target="_blank" rel="noreferrer" className="btn btn--small">
             <Rough preset="button" seed={`cta-${project.slug}`} />

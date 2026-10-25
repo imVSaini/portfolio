@@ -74,7 +74,7 @@ function Postcard() {
       <Rough preset="card" seed="postcard" />
       <span
         data-ink-seal
-        className="absolute top-[30%] left-[80%] size-0 sm:top-[74%] sm:left-[45%]"
+        className="absolute top-[45%] left-[82%] size-0 sm:top-[40%] sm:left-[45%] md:top-[74%]"
         aria-hidden
       />
       <div className="grid min-h-[min(46vh,22rem)] grid-cols-1 sm:grid-cols-[1fr_1.05fr]">

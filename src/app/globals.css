@@ -38,6 +38,8 @@
   --shadow-btn: 3px 4px 0 var(--color-ink);
   --shadow-note: 0 10px 18px -12px rgb(0 0 0 / 0.5);
 
+  --leading-statement: 1.32;
+
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
 

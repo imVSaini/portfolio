@@ -40,7 +40,7 @@ export function Toolkit() {
             >
               {group.doodle} {group.items.length} tools
             </span>
-            <h3 className="font-head text-[1.25rem] leading-tight font-bold">{group.group}</h3>
+            <h3 className="font-head text-xl leading-tight font-bold">{group.group}</h3>
             <p className="font-hand text-[1.1rem] leading-tight text-ink-soft">{group.note}</p>
             <ul className="mt-2.5 flex flex-wrap gap-1.5">
               {group.items.map((item) => (

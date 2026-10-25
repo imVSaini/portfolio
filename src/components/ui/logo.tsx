@@ -12,7 +12,7 @@ export const MONOGRAM = {
 /** Ink tile with a clay tile offset behind it, "vs" lettered in paper colour. */
 export function LogoMark({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 44 44" className={cn("logo-mark overflow-visible", className)} aria-hidden>
+    <svg viewBox="0 0 44 44" className={cn("overflow-visible", className)} aria-hidden>
       <rect
         data-ink-source
         x="6"

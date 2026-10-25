@@ -70,6 +70,7 @@ export function BottomNav() {
 
   return (
     <nav
+      data-bottom-nav
       aria-label="Sections"
       className="fixed inset-x-0 bottom-0 z-50 bg-paper/95 pr-[env(safe-area-inset-right)] pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)] backdrop-blur-md md:hidden"
     >
@@ -114,7 +115,7 @@ export function BottomNav() {
                 }}
                 aria-current={isActive ? "true" : undefined}
                 className={cn(
-                  "flex h-full w-full flex-col items-center justify-center gap-1 transition-colors duration-300 select-none active:scale-95",
+                  "flex size-full flex-col items-center justify-center gap-1 transition-colors duration-300 select-none active:scale-95",
                   isActive ? "text-ink" : "text-ink-soft",
                 )}
               >

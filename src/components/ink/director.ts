@@ -27,6 +27,8 @@ type Env = {
   R: number;
   pin?: ScrollTrigger;
   max: number;
+  top: number;
+  bottom: number;
 };
 
 type Act = {
@@ -190,8 +192,8 @@ function specimenAct(): Act | null {
     pose(pos, env, out) {
       const p = progress(pos);
       const spec = shape();
-      const land = { x: spec.x - spec.rx * 0.15, y: spec.y + spec.ry - env.R };
-      const leave = { x: spec.x + spec.rx * 0.8, y: spec.y + spec.ry - env.R };
+      const land = keep({ x: spec.x - spec.rx * 0.15, y: spec.y + spec.ry - env.R }, env);
+      const leave = keep({ x: spec.x + spec.rx * 0.8, y: spec.y + spec.ry - env.R }, env);
       if (p < 0.08) return setMain(out, land, env.R);
       if (p < 0.72) {
         const s = smooth(0.08, 0.42, p);
@@ -284,6 +286,9 @@ function ringsAct(): Act | null {
   const paths = Array.from(host.querySelectorAll<SVGPathElement>("[data-ring] path"));
   if (!paths.length) return null;
   const lengths = paths.map((p) => p.getTotalLength());
+  let keys = paths.map(() => 0);
+  let order = paths.map((_, i) => i);
+  let unit = 1;
 
   const on = (i: number, a: number): Pt => {
     const pt = paths[i].getPointAtLength(a * lengths[i]);
@@ -291,38 +296,41 @@ function ringsAct(): Act | null {
     if (!m) return { x: 0, y: 0 };
     return { x: m.a * pt.x + m.c * pt.y + m.e, y: m.b * pt.x + m.d * pt.y + m.f };
   };
-  const drawn = (pos: number) =>
-    smooth(0.22, 0.76, clamp01((pos - act.start) / (act.end - act.start)));
+  // Each ring is drawn as it reaches the middle of the screen, so on a short screen no droplet
+  // draws under the header.
+  const drawn = (i: number, pos: number) =>
+    smooth(keys[i] - unit * 0.08, keys[i] + unit * 0.12, pos);
 
   const act: Act = {
     start: 0,
     end: 1,
     measure(env) {
-      const k = keyFor(host, 0.55, env);
-      act.start = k - env.size * 0.12;
-      act.end = k + env.size * 0.22;
+      unit = env.size;
+      keys = paths.map((p) => keyFor(p.closest("svg") ?? p, 0.55, env));
+      order = paths.map((_, i) => i).sort((a, b) => keys[a] - keys[b] || a - b);
+      act.start = keys[order[0]] - unit * 0.2;
+      act.end = keys[order[order.length - 1]] + unit * 0.26;
     },
     pose(pos, env, out) {
-      const p = clamp01((pos - act.start) / (act.end - act.start));
-      const split = smooth(0.02, 0.22, p);
-      const draw = drawn(pos);
-      const merge = smooth(0.74, 0.96, p);
-      const box = host.getBoundingClientRect();
-      const exit = { x: box.left + box.width * 0.5, y: box.top + box.height * 0.5 };
-      const first = on(0, 0);
+      const first = order[0];
+      const last = order[order.length - 1];
+      const split = smooth(act.start, act.start + unit * 0.16, pos);
+      const merge = smooth(keys[last] + unit * 0.12, keys[last] + unit * 0.26, pos);
+      const origin = on(first, 0);
+      const home = on(last, 1);
       paths.forEach((_, i) => {
-        let at = draw > 0 ? on(i, draw) : arc(first, on(i, 0), split, 46);
-        if (merge > 0) at = arc(on(i, 1), exit, merge, 40);
+        const d = drawn(i, pos);
+        let at = d > 0 ? on(i, d) : keep(arc(origin, on(i, 0), split, 46), env);
+        if (merge > 0) at = keep(arc(on(i, 1), home, merge, 30), env);
         const r = lerp(env.R, env.R * 0.62, split) * (1 + merge * 0.5);
-        if (i === 0) setMain(out, at, r);
+        if (i === last) setMain(out, at, r);
         else out.extra.push({ x: at.x, y: at.y, r: r * split });
       });
     },
     effects(pos) {
-      const d = drawn(pos);
-      paths.forEach((p) => {
+      paths.forEach((p, i) => {
         write(p, "transition", "none");
-        write(p, "stroke-dashoffset", (1 - d).toFixed(4));
+        write(p, "stroke-dashoffset", (1 - drawn(i, pos)).toFixed(4));
       });
     },
     settle() {},
@@ -344,12 +352,23 @@ type HopConfig = {
   sink?: number;
 };
 
+// A travelling drop stays between the header and the bottom nav (both move on touch devices).
+function keep(p: Pt, env: Env): Pt {
+  const pad = env.R + 6;
+  const x = gsap.utils.clamp(pad, window.innerWidth - pad, p.x);
+  if (env.bottom - env.top < pad * 2) return { x, y: p.y };
+  return { x, y: gsap.utils.clamp(env.top + pad, env.bottom - pad, p.y) };
+}
+
 // A riding drop lets go before its target scrolls off-screen: it waits at a line near the
 // leading edge, then hops on.
 function hold(p: Pt, env: Env): Pt {
-  if (env.horizontal) return { x: Math.max(p.x, window.innerWidth * 0.16), y: p.y };
-  return { x: p.x, y: Math.max(p.y, window.innerHeight * 0.18) };
+  if (env.horizontal) return keep({ x: Math.max(p.x, window.innerWidth * 0.16), y: p.y }, env);
+  const line = env.top + (env.bottom - env.top) * 0.14;
+  return keep({ x: p.x, y: Math.max(p.y, line) }, env);
 }
+
+const lift = (env: Env, max: number) => Math.min(max, (env.bottom - env.top) * 0.24);
 
 function hopAct(cfg: HopConfig): Act | null {
   let els = cfg.select().filter(visible);
@@ -364,9 +383,16 @@ function hopAct(cfg: HopConfig): Act | null {
       const pairs = all.map((el) => ({ el, k: keyFor(el, cfg.f, env) })).sort((a, b) => a.k - b.k);
       els = pairs.map((p) => p.el);
       keys = pairs.map((p) => p.k);
-      // Landings at least a short hop apart, so neighbours in different rows never teleport.
-      for (let i = 1; i < keys.length; i++)
-        keys[i] = Math.max(keys[i], keys[i - 1] + env.size * 0.07);
+      // Landings at least a short hop apart, and further when neighbours sit in different rows or
+      // columns, so no hop ever teleports.
+      const cross = els.map((el) => {
+        const a = cfg.anchor(el);
+        return env.horizontal ? a.y : a.x;
+      });
+      for (let i = 1; i < keys.length; i++) {
+        const apart = env.size * 0.07 + Math.abs(cross[i] - cross[i - 1]) * 0.35;
+        keys[i] = Math.max(keys[i], keys[i - 1] + apart);
+      }
       act.start = keys[0];
       act.end = keys.length > 1 ? keys[keys.length - 1] : keys[0] + env.size * 0.1;
     },
@@ -376,14 +402,14 @@ function hopAct(cfg: HopConfig): Act | null {
       while (i < n - 2 && pos > keys[i + 1]) i++;
       const sink = cfg.sink ?? 0.6;
       if (n === 1) return setMain(out, cfg.anchor(els[0]), env.R * sink);
-      const span = keys[i + 1] - keys[i];
-      const hop = Math.min(span, env.size * 0.2);
-      const u = clamp01((pos - (keys[i + 1] - hop)) / Math.max(1, hop));
       const a = hold(cfg.anchor(els[i]), env);
       const b = cfg.anchor(els[i + 1]);
-      const h = gsap.utils.clamp(22, cfg.lift ?? 110, dist(a, b) * 0.4 + 18);
+      const span = keys[i + 1] - keys[i];
+      const hop = Math.min(span, Math.max(env.size * 0.2, dist(a, b) * 0.55));
+      const u = clamp01((pos - (keys[i + 1] - hop)) / Math.max(1, hop));
+      const h = gsap.utils.clamp(16, lift(env, cfg.lift ?? 110), dist(a, b) * 0.4 + 18);
       const air = smooth(0, 0.2, u) * (1 - smooth(0.8, 1, u));
-      setMain(out, u > 0 ? arc(a, b, u, h) : a, env.R * lerp(sink, 1, air));
+      setMain(out, u > 0 ? keep(arc(a, b, u, h), env) : a, env.R * lerp(sink, 1, air));
       if (u > 0) out.ground = lerp(a.y, b.y, u) + env.R;
     },
     effects(pos, env) {
@@ -486,7 +512,17 @@ function sealAct(): Act | null {
     },
     pose(pos, env, out) {
       const p = clamp01((pos - act.start) / (act.end - act.start));
-      const c = centre(mark);
+      const anchor = centre(mark);
+      const box = card.getBoundingClientRect();
+      const pad = env.R * 2.4;
+      const c = {
+        x: anchor.x,
+        y: gsap.utils.clamp(
+          Math.max(box.top, env.top) + pad,
+          Math.max(Math.max(box.top, env.top) + pad, Math.min(box.bottom, env.bottom) - pad),
+          anchor.y,
+        ),
+      };
       const spread = smooth(0.3, 0.62, p);
       const R = env.R;
       setMain(out, c, lerp(R, R * 1.75, spread));
@@ -565,18 +601,31 @@ export function playInk({ horizontal, reduced }: { horizontal: boolean; reduced:
   const sealRing = seal.querySelector("circle")!;
   const sealMark = seal.querySelector("text")!;
 
-  const env: Env = { horizontal, size: 1, R: 12, max: 1 };
+  const env: Env = { horizontal, size: 1, R: 12, max: 1, top: 0, bottom: 1 };
+  const header = document.querySelector<HTMLElement>("header");
+  const bottomNav = document.querySelector<HTMLElement>("[data-bottom-nav]");
+  const band = () => {
+    env.top = Math.max(0, header?.getBoundingClientRect().bottom ?? 0);
+    const nav = bottomNav?.getBoundingClientRect();
+    env.bottom = nav && nav.height > 0 ? Math.min(window.innerHeight, nav.top) : window.innerHeight;
+  };
   const measure = () => {
-    env.size = horizontal ? window.innerWidth : window.innerHeight;
-    env.R = horizontal ? gsap.utils.clamp(10, 15, window.innerWidth * 0.0095) : 10;
+    band();
+    env.size = horizontal ? window.innerWidth : Math.max(window.innerHeight, 620);
+    env.R = horizontal
+      ? gsap.utils.clamp(10, 15, window.innerWidth * 0.0095)
+      : gsap.utils.clamp(9, 14, window.innerWidth * 0.026);
     env.pin = ScrollTrigger.getById("fake-vertical");
     env.max = ScrollTrigger.maxScroll(window, horizontal);
     acts.forEach((a) => a.measure(env));
     acts.sort((a, b) => a.start - b.start);
-    const gap = env.size * 0.16;
     for (let i = 0; i < acts.length - 1; i++) {
       const a = acts[i];
       const b = acts[i + 1];
+      const from = sample(a, a.end);
+      const to = sample(b, b.start);
+      const across = horizontal ? Math.abs(to.y - from.y) : Math.abs(to.x - from.x);
+      const gap = env.size * 0.16 + across * 0.4;
       if (b.start - a.end >= gap) continue;
       const mid = (a.end + b.start) / 2;
       a.end = Math.max(a.start + 1, mid - gap / 2);
@@ -608,6 +657,7 @@ export function playInk({ horizontal, reduced }: { horizontal: boolean; reduced:
   const tick = (_: number, deltaMs: number) => {
     const dt = Math.min(1 / 30, deltaMs / 1000);
     const pos = horizontal ? window.scrollX : window.scrollY;
+    band();
     if (pos !== lastPos) acts.forEach((a) => a.effects(pos, env));
     lastPos = pos;
 
@@ -630,10 +680,11 @@ export function playInk({ horizontal, reduced }: { horizontal: boolean; reduced:
       const t = (pos - acts[i].end) / (acts[i + 1].start - acts[i].end);
       const span = Math.abs(horizontal ? to.x - from.x : to.y - from.y);
       const R = env.R;
-      const far = span > env.size * 0.7 || acts[i + 1].start - acts[i].end > env.size * 0.9;
+      const far =
+        acts[i + 1].start - acts[i].end > env.size * 0.9 || (horizontal && span > env.size * 0.7);
       const perch: Pt = horizontal
         ? { x: window.innerWidth / 2, y: window.innerHeight - 100 - R * 0.95 }
-        : { x: window.innerWidth - R * 2.4, y: window.innerHeight * 0.5 };
+        : { x: window.innerWidth - R * 2.4, y: (env.top + env.bottom) / 2 };
       let p: Pt;
       let ground: number;
       if (far) {
@@ -644,18 +695,18 @@ export function playInk({ horizontal, reduced }: { horizontal: boolean; reduced:
         );
         if (t < a) {
           const u = t / a;
-          p = arc(from, perch, u, gsap.utils.clamp(40, 220, dist(from, perch) * 0.3));
+          p = arc(from, perch, u, gsap.utils.clamp(24, lift(env, 220), dist(from, perch) * 0.3));
           ground = lerp(from.y, perch.y, u) + R;
         } else if (t > 1 - a) {
           const u = (t - (1 - a)) / a;
-          p = arc(perch, to, u, gsap.utils.clamp(40, 220, dist(perch, to) * 0.3));
+          p = arc(perch, to, u, gsap.utils.clamp(24, lift(env, 220), dist(perch, to) * 0.3));
           ground = lerp(perch.y, to.y, u) + R;
         } else {
           p = { x: perch.x, y: perch.y + Math.sin(t * 40) * 1.5 };
           ground = perch.y + R;
         }
       } else {
-        p = arc(from, to, t, gsap.utils.clamp(30, 200, dist(from, to) * 0.35));
+        p = arc(from, to, t, gsap.utils.clamp(20, lift(env, 200), dist(from, to) * 0.35));
         ground = lerp(from.y, to.y, t) + R;
       }
       const edge = Math.min(t, 1 - t);
@@ -663,7 +714,7 @@ export function playInk({ horizontal, reduced }: { horizontal: boolean; reduced:
         R,
         lerp(from.rx, to.rx, t) * (1 - smooth(0, 0.2, edge)) + R * smooth(0, 0.2, edge),
       );
-      setMain(out, p, r);
+      setMain(out, keep(p, env), r);
       out.ground = ground;
     }
 

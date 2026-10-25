@@ -31,7 +31,7 @@ export function About() {
       {/* fig. 02 — the statement */}
       <div className="md:w-[34vw]" data-lit>
         <p className="eyebrow mb-3 text-mineral">fig. 02 — why I draw</p>
-        <p className="font-head text-[1.7rem] leading-[1.32] md:text-[min(2.1vw,4vh)]">
+        <p className="font-head text-[1.7rem] leading-statement md:text-[min(2.1vw,4vh)]">
           {withHighlight(profile.statement, profile.statementHighlight)}
         </p>
         <p className="mt-6 text-[1.02rem] leading-relaxed text-ink-soft" data-reveal>

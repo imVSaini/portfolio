@@ -152,7 +152,7 @@ function PencilRule({ className, strong = false }: { className?: string; strong?
     <svg
       viewBox="0 0 1000 10"
       preserveAspectRatio="none"
-      className={cn("absolute inset-0 h-full w-full overflow-visible", className)}
+      className={cn("absolute inset-0 size-full overflow-visible", className)}
       aria-hidden
     >
       <path

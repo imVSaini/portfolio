@@ -51,7 +51,7 @@ export function Hero() {
         </ul>
       </div>
 
-      <Specimen className="mt-10 aspect-[520/470] w-full max-w-md self-center md:hidden" />
+      <Specimen className="mt-10 aspect-520/470 w-[min(100%,28rem,calc((100svh-12rem)*1.1))] self-center md:hidden" />
 
       <p
         className="absolute bottom-[calc(var(--ruler-h)+0.75rem)] left-[7vw] hidden items-center gap-2 font-hand text-xl text-plum md:flex"
