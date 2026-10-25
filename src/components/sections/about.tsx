@@ -60,12 +60,12 @@ export function About() {
       </div>
 
       {/* fig. 04 — about me */}
-      <div className="md:w-[42vw]" data-lit>
+      <div className="md:w-[max(42vw,480px)]" data-lit>
         <p className="eyebrow mb-3 text-mineral">fig. 04 — about me</p>
-        <h2 className="title mb-10">
+        <h2 className="title mb-10 short:mb-6">
           Software should be <span className="hl">the calm part</span> of your business.
         </h2>
-        <ul className="grid gap-x-6 gap-y-8 sm:grid-cols-2">
+        <ul className="grid gap-x-6 gap-y-8 sm:grid-cols-2 short:gap-y-6">
           {profile.pillars.map((p, i) => (
             <li
               key={p.title}

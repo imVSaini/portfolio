@@ -48,7 +48,7 @@ function ProjectCard({
   return (
     <li
       className={cn(
-        "card card--taped card--lift group shrink-0 p-4 md:w-[min(40vw,92vh)] md:p-5",
+        "card card--taped card--lift group shrink-0 p-4 md:flex md:max-h-[calc(100svh-var(--top-line)-var(--ruler-h)-3vh-40px)] md:w-[min(40vw,92vh)] md:flex-col md:p-5",
         index % 2 === 1 && "md:translate-y-[3vh]",
       )}
       style={{ "--tilt": TILTS[index % TILTS.length] } as CSSProperties}
@@ -58,7 +58,7 @@ function ProjectCard({
         href={project.href}
         target="_blank"
         rel="noreferrer"
-        className="relative isolate block aspect-16/10 bg-paper-dim md:aspect-auto md:h-[31vh] short:h-[27vh]"
+        className="relative isolate block aspect-16/10 bg-paper-dim md:aspect-auto md:h-[31vh] md:min-h-[14vh] short:h-[27vh]"
         aria-label={`${project.title} — live site (opens in a new tab)`}
       >
         {/* Pencil frame drawn over the screenshot. */}
@@ -85,7 +85,7 @@ function ProjectCard({
         </span>
       </a>
 
-      <div className="px-1.5 pt-4">
+      <div className="px-1.5 pt-4 md:shrink-0">
         <p className="eyebrow flex justify-between text-mineral">
           <span>
             fig. 07.{pad(index + 1)} — {project.category.toLowerCase()}
