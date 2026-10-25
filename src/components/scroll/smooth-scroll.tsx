@@ -4,12 +4,13 @@ import { useRef, type ReactNode } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
+import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import { useGSAP } from "@gsap/react";
 import LocomotiveScroll from "locomotive-scroll";
 import { useScrollStore } from "@/store/use-scroll-store";
 import type { SectionId } from "@/data/profile";
 
-gsap.registerPlugin(ScrollTrigger, SplitText, useGSAP);
+gsap.registerPlugin(ScrollTrigger, SplitText, MotionPathPlugin, useGSAP);
 
 const DESKTOP = "(min-width: 48rem) and (hover: hover) and (pointer: fine)";
 const MOBILE = "(max-width: 47.99rem), (hover: none), (pointer: coarse)";
@@ -144,6 +145,35 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
             start: horizontal ? "left 80%" : "top 80%",
             once: true,
             onEnter: () => el.classList.add("is-lit"),
+          });
+        });
+
+        // --- Props ------------------------------------------------------------------------------
+        gsap.utils.toArray<HTMLElement>("[data-prop]").forEach((el) => {
+          const path = el.querySelector<SVGPathElement>("[data-prop-path]");
+          const rider = el.querySelector<SVGGElement>("[data-prop-rider]");
+          const draw = el.querySelector("[data-prop-draw]");
+          if (!path || !rider || !draw || !el.getClientRects().length) return;
+
+          const tl = gsap.timeline({ defaults: { duration: 1, ease: "power1.inOut" } });
+          tl.to(
+            rider,
+            { motionPath: { path, align: path, alignOrigin: [0.5, 0.5], autoRotate: true } },
+            0,
+          ).fromTo(
+            draw,
+            { attr: { "stroke-dasharray": 1, "stroke-dashoffset": 1 } },
+            { attr: { "stroke-dashoffset": 0 } },
+            0,
+          );
+
+          if (reduced) return tl.progress(1);
+          ScrollTrigger.create({
+            trigger: el,
+            start: horizontal ? "left 95%" : "top bottom",
+            end: horizontal ? "clamp(right 35%)" : "clamp(bottom 40%)",
+            scrub: 0.8,
+            animation: tl,
           });
         });
 

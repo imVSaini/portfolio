@@ -3,6 +3,7 @@ import { profile } from "@/data/profile";
 import { BackToStart } from "@/components/ui/back-to-start";
 import { LocalTime } from "@/components/ui/local-time";
 import { Rough } from "@/components/ui/rough";
+import { PaperPlane } from "@/components/ui/scroll-props";
 
 const linkedIn = profile.socials.find((s) => s.label === "LinkedIn");
 const gitHub = profile.socials.find((s) => s.label === "GitHub");
@@ -58,6 +59,10 @@ export function Contact() {
           postage’s on me — just hit send ↗
         </p>
       </div>
+
+      <PaperPlane
+        className="w-full max-w-md self-end md:absolute md:max-w-none md:bottom-[calc(var(--ruler-h)+1.5rem)] md:left-[7vw] md:w-[min(58vw,105vh)] short:bottom-[calc(var(--ruler-h)+0.5rem)] short:w-[min(44vw,78vh)]"
+      />
     </section>
   );
 }
