@@ -2,7 +2,6 @@ import type { CSSProperties } from "react";
 import { toolkit } from "@/data/toolkit";
 import { cn } from "@/lib/cn";
 import { Rough } from "@/components/ui/rough";
-import { RollingGear } from "@/components/ui/scroll-props";
 
 const TILTS = ["-0.8deg", "0.7deg", "0.5deg", "-0.6deg", "-0.4deg", "0.9deg", "0.6deg", "-0.7deg"];
 
@@ -22,7 +21,6 @@ export function Toolkit() {
           From Python services and Node APIs to React interfaces, cloud infrastructure and
           LLM-powered features — the full stack, end to end.
         </p>
-        <RollingGear className="mt-10 w-full max-w-96 short:mt-6 short:max-w-80" />
       </div>
 
       {/* Cards flow into columns along the x-axis on desktop. */}

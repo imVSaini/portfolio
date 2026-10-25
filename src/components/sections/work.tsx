@@ -26,7 +26,7 @@ export function Work() {
         <p className="mt-4 font-hand text-2xl leading-snug text-plum">
           every card opens the live site ↗
         </p>
-        <Rocket className="mt-6 ml-auto w-36 md:mt-10 md:ml-0 md:w-[min(100%,20rem,36vh)]" />
+        <Rocket className="mx-auto mt-6 w-56 md:mx-0 md:mt-10 md:w-[min(100%,20rem,36vh)]" />
       </header>
 
       <ol className="flex flex-col gap-12 px-[6vw] pb-(--section-y) md:h-full md:flex-row md:items-start md:gap-[3.5vw] md:px-0 md:pt-[calc(var(--top-line)+13px)] md:pr-[6vw] md:pb-0">
