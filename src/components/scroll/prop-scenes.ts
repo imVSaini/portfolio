@@ -9,6 +9,8 @@ type Scene = {
   dispose?: () => void;
 };
 
+type Flight = { prefix?: string; origin?: [number, number]; turn?: boolean };
+
 const SVG_NS = "http://www.w3.org/2000/svg";
 
 const part = <T extends Element = SVGGraphicsElement>(el: Element, name: string) =>
@@ -41,16 +43,23 @@ function sketchIn(tl: gsap.core.Timeline, nodes: Element[], at: number, duration
   );
 }
 
-function fly(tl: gsap.core.Timeline, el: Element, at: number, duration: number, ease: string) {
-  const path = part<SVGPathElement>(el, "path");
+function fly(
+  tl: gsap.core.Timeline,
+  el: Element,
+  at: number,
+  duration: number,
+  ease: string,
+  { prefix = "", origin = [0.5, 0.5], turn = true }: Flight = {},
+) {
+  const path = part<SVGPathElement>(el, `${prefix}path`);
   tl.fromTo(
-    part(el, "trail"),
+    part(el, `${prefix}trail`),
     { attr: { "stroke-dasharray": 1, "stroke-dashoffset": 1 } },
     { attr: { "stroke-dashoffset": 0 }, duration, ease },
     at,
   );
-  const tween = gsap.to(part(el, "rider"), {
-    motionPath: { path, align: path, alignOrigin: [0.5, 0.5], autoRotate: true },
+  const tween = gsap.to(part(el, `${prefix}rider`), {
+    motionPath: { path, align: path, alignOrigin: origin, autoRotate: turn },
     duration,
     ease,
     immediateRender: true,
@@ -256,6 +265,127 @@ function rocket(el: HTMLElement): Scene {
   };
 }
 
+function journey(el: HTMLElement): Scene {
+  const path = part<SVGPathElement>(el, "path");
+  const rider = part(el, "rider");
+  const face = part(el, "face");
+  const stride = part(el, "stride");
+  const pole = part(el, "pole");
+  const length = path.getTotalLength();
+  const CLIMB_AT = 0.14;
+  const CLIMB_FOR = 0.68;
+
+  const nearest = (x: number, y: number) => {
+    let best = 0;
+    let gap = Infinity;
+    for (let i = 0; i <= 160; i++) {
+      const pt = path.getPointAtLength((i / 160) * length);
+      const d = Math.hypot(pt.x - x, pt.y - y);
+      if (d < gap) {
+        gap = d;
+        best = i / 160;
+      }
+    }
+    return best;
+  };
+
+  const tl = gsap.timeline({ defaults: { ease: "none" } });
+  sketchIn(tl, parts(el, "ink"), 0, 0.12);
+  tl.fromTo(
+    part(el, "base"),
+    { autoAlpha: 0, x: -8 },
+    { autoAlpha: 1, x: 0, duration: 0.05 },
+    0.08,
+  ).fromTo(
+    parts(el, "cloud"),
+    { autoAlpha: 0 },
+    { autoAlpha: 1, duration: 0.06, stagger: 0.03 },
+    0.04,
+  );
+  tl.to(parts(el, "cloud"), { x: (i: number) => (i ? "-=18" : "+=22"), duration: 1 }, 0);
+  tl.fromTo(part(el, "birds"), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.04 }, 0.18).to(
+    part(el, "birds"),
+    { x: "+=86", y: "-=34", duration: 0.6 },
+    0.18,
+  );
+
+  fly(tl, el, CLIMB_AT, CLIMB_FOR, "none", { origin: [0.5, 1], turn: false });
+
+  parts(el, "tent").forEach((tent) => {
+    const at = nearest(Number(tent.getAttribute("data-x")), Number(tent.getAttribute("data-y")));
+    tl.fromTo(
+      tent,
+      { autoAlpha: 0, scale: 0, transformOrigin: "50% 100%" },
+      { autoAlpha: 1, scale: 1, duration: 0.04, ease: "back.out(3)" },
+      CLIMB_AT + CLIMB_FOR * at,
+    );
+  });
+
+  const summit = CLIMB_AT + CLIMB_FOR;
+  tl.fromTo(
+    part(el, "flag"),
+    { scaleY: 0, transformOrigin: "50% 100%" },
+    { scaleY: 1, duration: 0.05, ease: "back.out(2.5)" },
+    summit,
+  );
+  popIn(tl, part(el, "summit"), summit + 0.03, -3);
+  tl.fromTo(
+    part(el, "comet-rider"),
+    { autoAlpha: 0 },
+    { autoAlpha: 1, duration: 0.01 },
+    summit + 0.06,
+  );
+  fly(tl, el, summit + 0.06, 0.08, "power2.out", { prefix: "comet-" });
+  popIn(tl, part(el, "beyond"), summit + 0.12, -5);
+
+  const wave = gsap.to(part(el, "cloth"), {
+    skewY: 12,
+    transformOrigin: "0% 50%",
+    duration: 0.45,
+    ease: "sine.inOut",
+    yoyo: true,
+    repeat: -1,
+    paused: true,
+  });
+  const flap = gsap.to(parts(el, "wing"), {
+    scaleY: 0.35,
+    transformOrigin: "50% 100%",
+    duration: 0.22,
+    ease: "sine.inOut",
+    yoyo: true,
+    repeat: -1,
+    stagger: 0.11,
+    paused: true,
+  });
+
+  gsap.set(face, { transformOrigin: "50% 100%" });
+  gsap.set(pole, { transformOrigin: "0% 0%" });
+  let lastX = Number(gsap.getProperty(rider, "x"));
+  let lastY = Number(gsap.getProperty(rider, "y"));
+  let facing = 1;
+  let phase = 0;
+  return {
+    tl,
+    loops: [wave, flap],
+    tick: () => {
+      const x = Number(gsap.getProperty(rider, "x"));
+      const y = Number(gsap.getProperty(rider, "y"));
+      const dx = x - lastX;
+      const moved = Math.hypot(dx, y - lastY);
+      lastX = x;
+      lastY = y;
+      if (moved < 0.02) return;
+      phase += moved * 0.55;
+      gsap.set(stride, { y: -Math.abs(Math.sin(phase)) * 1.8 });
+      gsap.set(pole, { rotation: Math.sin(phase) * 16 });
+      const dir = Math.abs(dx) > 0.05 ? Math.sign(dx) : facing;
+      if (dir === facing) return;
+      facing = dir;
+      gsap.to(face, { scaleX: dir, duration: 0.25, ease: "power2.out" });
+    },
+  };
+}
+
 const DUST = [
   [-9, -7],
   [-12, 2],
@@ -310,6 +440,7 @@ function footprints(el: HTMLElement): Scene {
 const SCENES: Record<string, (el: HTMLElement) => Scene> = {
   plane,
   rocket,
+  journey,
   footprints,
 };
 
@@ -328,19 +459,34 @@ export function playProps({ horizontal, reduced }: { horizontal: boolean; reduce
       return;
     }
 
+    const panel = horizontal ? el.closest<HTMLElement>("[data-fake-vertical]") : null;
+    const track = panel?.querySelector<HTMLElement>("[data-fake-vertical-track]");
+    const pinned = panel && track ? panel : null;
+    const travel = () => (track ? Math.max(0, track.scrollHeight - window.innerHeight) : 0);
+
     ScrollTrigger.create({
-      trigger: el,
-      start: horizontal ? "left 95%" : "top bottom",
-      end: horizontal ? "clamp(right 35%)" : "clamp(bottom 40%)",
+      trigger: pinned ?? el,
+      start: pinned ? "left right" : horizontal ? "left 95%" : "top bottom",
+      end: pinned
+        ? () => `+=${window.innerWidth + travel()}`
+        : horizontal
+          ? "clamp(right 35%)"
+          : "clamp(bottom 40%)",
+      invalidateOnRefresh: true,
       scrub: 1,
       animation: scene.tl,
       onUpdate: scene.onScroll,
     });
 
     ScrollTrigger.create({
-      trigger: el,
+      trigger: pinned ?? el,
       start: horizontal ? "left right" : "top bottom",
-      end: horizontal ? "right left" : "bottom top",
+      end: pinned
+        ? () => `+=${window.innerWidth * 2 + travel()}`
+        : horizontal
+          ? "right left"
+          : "bottom top",
+      invalidateOnRefresh: true,
       onToggle: (self) => {
         if (self.isActive) visible.add(scene);
         else visible.delete(scene);

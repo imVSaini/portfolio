@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
+import rough from "roughjs";
 import { cn } from "@/lib/cn";
 
+const gen = rough.generator();
 const CARD = { fill: "var(--color-card)" };
 
 function Prop({
@@ -30,11 +32,13 @@ function Trail({
   id,
   d,
   width,
+  part = "trail",
   children,
 }: {
   id: string;
   d: string;
   width: number;
+  part?: string;
   children: ReactNode;
 }) {
   return (
@@ -42,7 +46,7 @@ function Trail({
       <defs>
         <mask id={id} maskUnits="userSpaceOnUse" x="-100" y="-200" width="1200" height="600">
           <path
-            data-part="trail"
+            data-part={part}
             d={d}
             pathLength={1}
             fill="none"
@@ -212,6 +216,186 @@ export function Footprints({ className }: { className?: string }) {
         >
           still walking →
         </text>
+      </svg>
+    </Prop>
+  );
+}
+
+const MOUNTAIN = "M10 250 L 120 70 L 150 110 L 200 30 L 310 250 Z";
+const SWITCHBACKS =
+  "M60 246 C 110 240 150 232 172 222 C 132 212 100 200 114 188 C 142 176 190 172 216 160 C 200 142 162 132 172 118 C 186 106 208 100 220 94 C 214 82 206 74 206 62 C 206 50 202 42 200 32";
+const COMET = "M206 10 C 232 -6 264 -10 300 -2";
+
+const mountainInk = gen.toPaths(
+  gen.path(MOUNTAIN, {
+    seed: 61,
+    stroke: "var(--color-ink)",
+    strokeWidth: 1.7,
+    roughness: 0.9,
+    bowing: 0.7,
+    fill: "color-mix(in srgb, var(--color-mineral) 55%, transparent)",
+    fillStyle: "hachure",
+    hachureGap: 5,
+    hachureAngle: -38,
+    fillWeight: 1,
+  }),
+);
+
+const TENTS = [
+  { x: 172, y: 222 },
+  { x: 172, y: 118 },
+];
+
+const CLOUDS = [
+  { x: 40, y: 34, s: 1 },
+  { x: 250, y: 74, s: 0.8 },
+];
+
+export function JourneyClimb({ className }: { className?: string }) {
+  return (
+    <Prop name="journey" depth={10} className={className}>
+      <svg viewBox="0 0 320 262" className="h-full w-full overflow-visible">
+        {CLOUDS.map((c) => (
+          <g key={c.x} data-part="cloud" transform={`translate(${c.x} ${c.y}) scale(${c.s})`}>
+            <path
+              d="M0 0 C 0 -8 10 -10 14 -5 C 18 -12 30 -10 30 -2 C 36 -2 36 6 30 6 L 2 6 C -4 6 -4 0 0 0 Z"
+              className="ink thin"
+              style={CARD}
+            />
+          </g>
+        ))}
+
+        <g data-part="birds" transform="translate(28 96)">
+          {[
+            [0, 0],
+            [16, -8],
+          ].map(([x, y]) => (
+            <path
+              key={x}
+              data-part="wing"
+              d={`M${x} ${y} q 4 -4 8 0 q 4 -4 8 0`}
+              className="ink thin"
+            />
+          ))}
+        </g>
+
+        {mountainInk.map((p, i) => (
+          <path
+            key={i}
+            data-part="ink"
+            d={p.d}
+            pathLength={1}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            style={{ stroke: p.stroke, strokeWidth: p.strokeWidth, fill: p.fill ?? "none" }}
+          />
+        ))}
+        <path
+          data-part="ink"
+          pathLength={1}
+          d="M184 56 L200 30 L214 58 L207 52 L200 60 L192 50 Z"
+          className="ink thin"
+          style={CARD}
+        />
+        <path
+          data-part="ink"
+          pathLength={1}
+          d="M110 86 L120 70 L131 85 L125 81 L119 88 Z"
+          className="ink thin"
+          style={CARD}
+        />
+        <path
+          data-part="ink"
+          pathLength={1}
+          d="M0 252 C 80 250 200 253 320 251"
+          className="ink ghost"
+        />
+
+        <Trail id="prop-journey-trail" d={SWITCHBACKS} width={9}>
+          <path data-part="path" d={SWITCHBACKS} className="ink thin" strokeDasharray="4 6" />
+        </Trail>
+
+        {TENTS.map((t) => (
+          <g key={t.y} transform={`translate(${t.x} ${t.y})`}>
+            <g data-part="tent" data-x={t.x} data-y={t.y}>
+              <path
+                d="M-9 0 L0 -13 L9 0 Z"
+                className="ink thin"
+                style={{ fill: "var(--color-oat)" }}
+              />
+              <path d="M0 -13 L-2.5 0 L2.5 0 Z" style={{ fill: "var(--color-ink)" }} />
+            </g>
+          </g>
+        ))}
+
+        <g data-part="flag">
+          <path d="M200 32 L200 6" className="ink thin" />
+          <path
+            data-part="cloth"
+            d="M200 6 L218 11 L200 16 Z"
+            className="ink thin"
+            style={{ fill: "var(--color-signal)" }}
+          />
+        </g>
+        <text
+          data-part="summit"
+          x="194"
+          y="16"
+          textAnchor="end"
+          className="fill-ink font-hand text-[16px] font-bold"
+        >
+          production
+        </text>
+
+        <Trail id="prop-journey-comet" d={COMET} width={8} part="comet-trail">
+          <path
+            data-part="comet-path"
+            d={COMET}
+            className="ink"
+            style={{ strokeWidth: 3, opacity: 0.35 }}
+            strokeDasharray="0.5 7"
+          />
+        </Trail>
+        <g data-part="comet-rider" transform="translate(300 -2)">
+          <path
+            d="M0 -7 Q 1.1 -1.1 7 0 Q 1.1 1.1 0 7 Q -1.1 1.1 -7 0 Q -1.1 -1.1 0 -7 Z"
+            style={{ fill: "var(--color-signal)" }}
+          />
+        </g>
+        <text
+          data-part="beyond"
+          x="306"
+          y="22"
+          textAnchor="end"
+          className="fill-plum font-hand text-[17px]"
+        >
+          &amp; beyond
+        </text>
+
+        <text data-part="base" x="20" y="272" className="fill-ink-soft font-hand text-[15px]">
+          blank editor
+        </text>
+
+        <g data-part="rider" transform="translate(200 32)">
+          <g data-part="face">
+            <g data-part="stride">
+              <g transform="scale(1.25)">
+                <path d="M-3 0 L0 -7 L3 0 M0 -7 L0 -14" className="ink thin" />
+                <path data-part="pole" d="M2 -11 L6 0" className="ink thin" />
+                <rect
+                  x="-5.5"
+                  y="-15"
+                  width="4.5"
+                  height="7"
+                  rx="1"
+                  className="ink thin"
+                  style={{ fill: "var(--color-signal)" }}
+                />
+                <circle cx="0.6" cy="-17.6" r="3" className="ink thin" style={CARD} />
+              </g>
+            </g>
+          </g>
+        </g>
       </svg>
     </Prop>
   );

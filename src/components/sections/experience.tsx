@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import { experience } from "@/data/experience";
 import { ScrollLink } from "@/components/ui/scroll-link";
 import { JourneyPencil } from "@/components/ui/journey-pencil";
+import { JourneyClimb } from "@/components/ui/scroll-props";
 import { Rough } from "@/components/ui/rough";
 
 const TILTS = ["-0.6deg", "0.5deg", "-0.4deg", "0.6deg"];
@@ -43,10 +44,13 @@ export function Experience() {
             </h2>
           </div>
 
-          <JourneyPencil
-            marks={MARKS}
-            className="hidden h-[min(28vh,15rem)] md:block short:h-[24vh]"
-          />
+          <div className="flex items-end gap-8">
+            <JourneyPencil
+              marks={MARKS}
+              className="hidden h-[min(28vh,15rem)] shrink-0 md:block short:h-[24vh]"
+            />
+            <JourneyClimb className="aspect-[320/262] w-full max-w-xs md:h-[min(28vh,15rem)] md:w-auto md:max-w-none short:h-[24vh]" />
+          </div>
         </aside>
 
         {/* Fades the column out under the header and above the career ruler while it travels. */}
