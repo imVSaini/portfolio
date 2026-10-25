@@ -13,7 +13,15 @@ export const MONOGRAM = {
 export function LogoMark({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 44 44" className={cn("logo-mark overflow-visible", className)} aria-hidden>
-      <rect x="6" y="6" width="36" height="36" rx="10" className="logo-shadow fill-signal" />
+      <rect
+        data-ink-source
+        x="6"
+        y="6"
+        width="36"
+        height="36"
+        rx="10"
+        className="logo-shadow fill-signal"
+      />
       <g className="logo-tile">
         <rect x="2" y="2" width="36" height="36" rx="10" className="fill-ink" />
         <g

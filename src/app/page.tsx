@@ -5,6 +5,7 @@ import { Experience } from "@/components/sections/experience";
 import { Work } from "@/components/sections/work";
 import { Toolkit } from "@/components/sections/toolkit";
 import { Contact } from "@/components/sections/contact";
+import { InkLayer } from "@/components/ink/ink-layer";
 
 export default function Home() {
   return (
@@ -18,6 +19,7 @@ export default function Home() {
         <Work />
         <Contact />
       </main>
+      <InkLayer />
     </SmoothScroll>
   );
 }

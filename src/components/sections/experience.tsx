@@ -1,29 +1,23 @@
 import type { CSSProperties } from "react";
 import { experience } from "@/data/experience";
 import { ScrollLink } from "@/components/ui/scroll-link";
-import { JourneyPencil } from "@/components/ui/journey-pencil";
-import { JourneyClimb } from "@/components/ui/scroll-props";
 import { Rough } from "@/components/ui/rough";
 
 const TILTS = ["-0.6deg", "0.5deg", "-0.4deg", "0.6deg"];
 
 function StepNo({ n }: { n: number }) {
   return (
-    <span className="absolute -top-7 left-6 isolate grid size-14 place-items-center font-hand text-[1.8rem] font-bold">
+    <span
+      data-ink-step
+      className="absolute -top-7 left-6 isolate grid size-14 place-items-center font-hand text-[1.8rem] font-bold"
+    >
       <span className="absolute inset-0.5 -z-20 rounded-full bg-oat" aria-hidden />
+      <span className="ink-step-fill absolute inset-0.5 -z-10 rounded-full bg-signal" aria-hidden />
       <Rough preset="circle" seed={`step-${n}`} />
       {String(n).padStart(2, "0")}
     </span>
   );
 }
-
-// Margin years in card order (newest first), then the open slot that card 04 asks about.
-const MARKS = [
-  { at: 0, label: "2022" },
-  { at: 1 / 3, label: "2020" },
-  { at: 2 / 3, label: "2019" },
-  { at: 1, label: "next", tone: "next" as const },
-];
 
 /**
  * The "fake-vertical" panel. On desktop the outer wrapper is what the horizontal scroll sees;
@@ -42,14 +36,6 @@ export function Experience() {
             <h2 className="title">
               From a blank editor to <span className="hl">production</span> — and beyond.
             </h2>
-          </div>
-
-          <div className="flex items-end gap-8">
-            <JourneyPencil
-              marks={MARKS}
-              className="hidden h-[min(28vh,15rem)] shrink-0 md:block short:h-[24vh]"
-            />
-            <JourneyClimb className="aspect-[320/262] w-full max-w-xs md:h-[min(28vh,15rem)] md:w-auto md:max-w-none short:h-[24vh]" />
           </div>
         </aside>
 

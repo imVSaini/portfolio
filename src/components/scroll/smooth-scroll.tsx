@@ -8,7 +8,7 @@ import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import { useGSAP } from "@gsap/react";
 import LocomotiveScroll from "locomotive-scroll";
 import { useScrollStore } from "@/store/use-scroll-store";
-import { playProps } from "@/components/scroll/prop-scenes";
+import { playInk } from "@/components/ink/director";
 import type { SectionId } from "@/data/profile";
 
 gsap.registerPlugin(ScrollTrigger, SplitText, MotionPathPlugin, useGSAP);
@@ -71,13 +71,13 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
         if (horizontal) {
           const panel = document.querySelector<HTMLElement>("[data-fake-vertical]");
           const track = panel?.querySelector<HTMLElement>("[data-fake-vertical-track]");
-          const meter = panel?.querySelector<HTMLElement>("[data-fake-vertical-meter]");
 
           if (panel && track) {
             const distance = () => Math.max(0, track.scrollHeight - window.innerHeight);
             const tl = gsap.timeline({
               defaults: { ease: "none" },
               scrollTrigger: {
+                id: "fake-vertical",
                 trigger: panel,
                 start: "left left",
                 end: () => `+=${distance()}`,
@@ -87,7 +87,6 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
               },
             });
             tl.to(track, { y: () => -distance() }, 0);
-            if (meter) tl.fromTo(meter, { scaleY: 0 }, { scaleY: 1 }, 0);
           }
         }
 
@@ -149,8 +148,8 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
           });
         });
 
-        // --- Props ------------------------------------------------------------------------------
-        cleanups.push(playProps({ horizontal, reduced }));
+        // --- One drop -------------------------------------------------------------------------
+        cleanups.push(playInk({ horizontal, reduced }));
 
         // Keyboard: down/up keys should move along the x-axis too.
         const onKey = (e: KeyboardEvent) => {

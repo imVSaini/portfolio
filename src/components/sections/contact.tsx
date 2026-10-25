@@ -3,7 +3,6 @@ import { profile } from "@/data/profile";
 import { BackToStart } from "@/components/ui/back-to-start";
 import { LocalTime } from "@/components/ui/local-time";
 import { Rough } from "@/components/ui/rough";
-import { PaperPlane } from "@/components/ui/scroll-props";
 
 const linkedIn = profile.socials.find((s) => s.label === "LinkedIn");
 const gitHub = profile.socials.find((s) => s.label === "GitHub");
@@ -59,8 +58,6 @@ export function Contact() {
           postage’s on me — just hit send ↗
         </p>
       </div>
-
-      <PaperPlane className="w-full max-w-md self-end md:absolute md:bottom-[calc(var(--ruler-h)+1.5rem)] md:left-[7vw] md:w-[min(58vw,105vh)] md:max-w-none short:bottom-[calc(var(--ruler-h)+0.5rem)] short:w-[min(44vw,78vh)]" />
     </section>
   );
 }
@@ -75,6 +72,11 @@ function Postcard() {
       style={{ "--tilt": "0.6deg" } as CSSProperties}
     >
       <Rough preset="card" seed="postcard" />
+      <span
+        data-ink-seal
+        className="absolute top-[30%] left-[80%] size-0 sm:top-[74%] sm:left-[45%]"
+        aria-hidden
+      />
       <div className="grid min-h-[min(46vh,22rem)] grid-cols-1 sm:grid-cols-[1fr_1.05fr]">
         {/* Message side — left blank for the sender. */}
         <div className="flex flex-col justify-between gap-6 p-6 sm:border-r-[1.5px] sm:border-dashed sm:border-ink/35 md:p-7">

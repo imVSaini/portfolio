@@ -2,7 +2,6 @@ import type { CSSProperties } from "react";
 import { profile } from "@/data/profile";
 import { Ring } from "@/components/ui/sketches";
 import { Rough } from "@/components/ui/rough";
-import { Footprints } from "@/components/ui/scroll-props";
 
 const TILTS = ["-1deg", "0.8deg", "0.6deg", "-0.9deg"];
 const DRIFT = [0.03, -0.02, 0.04, -0.03];
@@ -14,7 +13,9 @@ function withHighlight(text: string, phrase: string) {
   return (
     <>
       {text.slice(0, at)}
-      <span className="hl">{phrase}</span>
+      <span className="hl" data-ink-hl>
+        {phrase}
+      </span>
       {text.slice(at + phrase.length)}
     </>
   );
@@ -36,7 +37,6 @@ export function About() {
         <p className="mt-6 text-[1.02rem] leading-relaxed text-ink-soft" data-reveal>
           {profile.lead}
         </p>
-        <Footprints className="mt-8 w-full max-w-104 short:mt-5 short:max-w-84" />
       </div>
 
       {/* fig. 03 — the footprint */}
@@ -45,7 +45,7 @@ export function About() {
         <h2 className="title mb-10 short:mb-6">
           My footprint, <span className="hl">measured in shipped code</span>
         </h2>
-        <ul className="grid grid-cols-2 gap-x-6 gap-y-10 short:gap-y-5">
+        <ul className="grid grid-cols-2 gap-x-6 gap-y-10 short:gap-y-5" data-ink-rings>
           {profile.stats.map((s, i) => (
             <li key={s.label} data-scroll data-scroll-speed={String(DRIFT[i])}>
               <p className="relative inline-flex items-baseline gap-1 px-3.5 py-2 font-hand text-[clamp(3rem,min(4.4vw,7.5vh),4.2rem)] leading-none font-bold">

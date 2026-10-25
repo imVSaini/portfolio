@@ -408,16 +408,6 @@
     }
   }
 
-  /* Project frames wipe open when Locomotive marks them in view. */
-  .frame-reveal {
-    clip-path: inset(0 100% 0 0);
-    transition: clip-path 1.4s var(--ease-in-out-quart);
-  }
-
-  .frame-reveal.is-inview {
-    clip-path: inset(0 0 0 0);
-  }
-
   /* Lines are split at measure time; a small difference at paint time must not re-wrap them
      (that orphaned single words like "Tell" on their own line). */
   [data-reveal] > * {
@@ -500,83 +490,68 @@ html:not(.is-loading) .logo-draw path + path {
   }
 }
 
-/* System sketch: arrows draw in, boxes settle, requests start flowing — once the preloader lifts. */
 @keyframes sketch-draw {
   to {
     stroke-dashoffset: 0;
   }
 }
 
-@keyframes sketch-settle {
-  from {
-    opacity: 0;
-    transform: translateY(8px) rotate(-1.5deg);
-  }
+/* One drop: the clay ink. Every mark below is ink-driven when the director runs; without it
+   (no script, reduced motion) each falls back to its finished look. */
+.ink-layer {
+  mix-blend-mode: multiply;
 }
 
-@keyframes sketch-fade {
-  from {
-    opacity: 0;
-  }
+:root[data-theme="dark"] .ink-layer {
+  mix-blend-mode: screen;
 }
 
-.sketch-in .sketch-stroke {
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
+.chip--featured > svg {
+  opacity: calc(0.2 + 0.8 * var(--ink, 1));
 }
 
-html:not(.is-loading) .sketch-in .sketch-node {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: sketch-settle 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
-  animation-delay: calc(0.15s + var(--i) * 0.08s);
+.ink-step-fill {
+  scale: var(--ink, 0);
 }
 
-html:not(.is-loading) .sketch-in .sketch-stroke {
-  animation: sketch-draw 0.9s cubic-bezier(0.6, 0, 0.3, 1) forwards;
-  animation-delay: calc(0.7s + var(--i) * 0.12s);
+[data-ink-frame] {
+  mask-image: radial-gradient(
+    circle at var(--ix, 50%) var(--iy, 50%),
+    #000 calc(var(--ir, 300vmax) - 56px),
+    rgb(0 0 0 / 0.14) var(--ir, 300vmax)
+  );
 }
 
-html:not(.is-loading) .sketch-in .sketch-note {
-  animation: sketch-fade 0.6s ease both;
-  animation-delay: calc(1.6s + var(--i) * 0.1s);
+.ink-seal-ring {
+  fill: none;
+  stroke: var(--color-clay-deep);
 }
 
-/* Async paths and the tenant boundary are dashed, so they fade in rather than draw. */
-.sketch-dash {
-  stroke-dasharray: 5 6;
+.ink-seal-mark {
+  fill: var(--color-clay-deep);
 }
 
-html:not(.is-loading) .sketch-in .sketch-dash-group,
-html:not(.is-loading) .sketch-in g:has(> .sketch-dash) > .sketch-dash {
-  animation: sketch-fade 0.8s ease both;
-  animation-delay: calc(0.6s + var(--i, 0) * 0.12s);
+.specimen-line {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-signal) calc(var(--ink, 0) * 100%), var(--color-ink));
+  stroke-width: 1.3;
+  stroke-linecap: round;
 }
 
-html.is-loading .sketch-in .sketch-node,
-html.is-loading .sketch-in .sketch-note,
-html.is-loading .sketch-in .sketch-dash-group,
-html.is-loading .sketch-in .sketch-dash {
-  opacity: 0;
+.specimen-ghost {
+  opacity: 0.45;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .sketch-in .sketch-stroke {
-    stroke-dasharray: none;
-  }
+.specimen-drop {
+  fill: none;
+  stroke: var(--color-ink);
+  stroke-width: 1.4;
+  stroke-dasharray: 6 6;
+  opacity: calc(1 - var(--ink, 0) * 0.7);
+}
 
-  .sketch-in .sketch-node,
-  .sketch-in .sketch-stroke,
-  .sketch-in .sketch-note,
-  .sketch-in .sketch-dash,
-  .sketch-in .sketch-dash-group {
-    animation: none !important;
-    opacity: 1 !important;
-  }
-
-  .sketch-packets {
-    display: none;
-  }
+.specimen-tag {
+  opacity: var(--ink, 0);
 }
 
 /* Pencil strokes for the inline SVG drawings. */
@@ -621,11 +596,6 @@ html.is-loading .sketch-in .sketch-dash {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .frame-reveal {
-    clip-path: none;
-    transition: none;
-  }
-
   .hl {
     transition: none;
     background-size: 100% 52%;
