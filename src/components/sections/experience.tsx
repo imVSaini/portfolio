@@ -40,10 +40,10 @@ export function Experience() {
         </aside>
 
         {/* Fades the column out under the header and above the career ruler while it travels. */}
-        <div className="px-[6vw] md:w-[62vw] md:mask-[linear-gradient(to_bottom,transparent_5rem,black_10rem,black_calc(100%-var(--ruler-h)-4rem),transparent_calc(100%-var(--ruler-h)-0.5rem))] md:pr-[6vw] md:pl-[1vw]">
+        <div className="px-[6vw] md:w-[62vw] md:mask-[linear-gradient(to_bottom,transparent_var(--header-h),black_calc(var(--header-h)+2rem),black_calc(100%-var(--ruler-h)-4rem),transparent_calc(100%-var(--ruler-h)-0.5rem))] md:pr-[6vw] md:pl-[1vw]">
           <ol
             data-fake-vertical-track
-            className="space-y-12 pt-10 pb-(--section-y) md:pt-[calc(var(--top-line)+1.75rem)] md:pb-[24vh]"
+            className="space-y-12 pt-10 pb-(--section-y) md:pt-[calc(var(--top-line)+1.75rem)] md:pb-[calc(var(--ruler-h)+6rem)]"
           >
             {experience.map((role, i) => (
               <li
